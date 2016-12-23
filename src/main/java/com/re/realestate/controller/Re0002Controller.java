@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.re.realestate.model.FF0002Model;
-import com.re.realestate.service.IFF0002Service;
+import com.re.realestate.model.Re0002Model;
+import com.re.realestate.service.IRe0002Service;
 
 /**
  * Just only index, view,
@@ -24,20 +24,20 @@ import com.re.realestate.service.IFF0002Service;
  *
  */
 @Controller
-@SessionAttributes("ff0002")
-@RequestMapping("/ff0002")
-public class FF0002Controller extends FFBaseController {
+@SessionAttributes("re0002")
+@RequestMapping("/re0002")
+public class Re0002Controller extends ReBaseController {
 
 	private static final Logger logger = LogManager
-			.getLogger(FF0002Controller.class);
+			.getLogger(Re0002Controller.class);
 	@Autowired
-	private IFF0002Service ff0002Service;
+	private IRe0002Service re0002Service;
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	public ModelAndView login(ModelAndView mav, @ModelAttribute FF0002Model prm)
+	public ModelAndView login(ModelAndView mav, @ModelAttribute Re0002Model prm)
 			throws SQLException {
 
-		mav.setViewName("ff0002/ff000201");
+		mav.setViewName("re0002/re000201");
 		return mav;
 	}
 }

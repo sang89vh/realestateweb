@@ -8,18 +8,18 @@
 	<http security="none" pattern="/resources/**"/>
     <!-- enable use-expressions -->
 	<http auto-config="true">
-		<intercept-url pattern="/ff0001/**" access="permitAll"/>
+		<intercept-url pattern="/re0001/**" access="permitAll"/>
 		<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"/>
 		<!-- access denied page -->
-		<access-denied-handler error-page="/ff0001/403" />
+		<access-denied-handler error-page="/re0001/403" />
 		<!-- if user doesn't logged -->
 		<form-login 
-		    login-page="/ff0001/login" 
-		    default-target-url="/ff0000/index" 
-			authentication-failure-url="/ff0001/login?error" 
+		    login-page="/re0001/login" 
+		    default-target-url="/re0002/index" 
+			authentication-failure-url="/re0001/login?error" 
 			username-parameter="USER_NAME"
 			password-parameter="PASSWORD" />
-		<logout logout-success-url="/ff0001/login?logout"  />
+		<logout logout-success-url="/re0001/login?logout"  />
 		<!-- enable csrf protection -->
 		<csrf/>
 	</http>

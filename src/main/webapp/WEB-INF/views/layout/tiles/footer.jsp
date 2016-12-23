@@ -18,7 +18,7 @@
 
 		<div class="col-xs-5">
 			<div class="footer-banner">
-				<h3 class="footer-title">FDemo</h3>
+				<h3 class="footer-title">realestate</h3>
 				<ul>
 					
 				</ul>

@@ -1,16 +1,16 @@
 package com.re.realestate.exception;
 import java.util.List;
 
-public class FFException extends BaseException {
+public class ReException extends BaseException {
 	
 	private static final long serialVersionUID = 8823356956725033191L;
 
-	public FFException(ErrorCodeEnum errorCodeEnum) {
+	public ReException(ErrorCodeEnum errorCodeEnum) {
 		super();
 		this.setErrorCode(errorCodeEnum);
 	}
 	
-	public FFException(ErrorCodeEnum errorCodeEnum,List<FieldError> fieldErrors) {
+	public ReException(ErrorCodeEnum errorCodeEnum,List<FieldError> fieldErrors) {
 		super();
 		this.setErrorCode(errorCodeEnum);
 		this.setFieldErrors(fieldErrors);

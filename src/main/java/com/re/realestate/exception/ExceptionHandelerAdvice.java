@@ -20,8 +20,8 @@ public class ExceptionHandelerAdvice {
 	@Autowired
 	protected MessageSource messageSource;
 
-	@ExceptionHandler(FFException.class)
-	public @ResponseBody RestError handleCustomException(FFException wbex,
+	@ExceptionHandler(ReException.class)
+	public @ResponseBody RestError handleCustomException(ReException wbex,
 			HttpServletRequest request, HttpServletResponse response) {
 
 		logger.info("ExceptionHandelerAdvice:handle controller exception");

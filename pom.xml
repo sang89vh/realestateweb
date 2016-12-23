@@ -371,7 +371,7 @@
 		</developer>
 	</developers>
 	<build>
-		<finalName>FDemo</finalName>
+		<finalName>realestate</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
