@@ -8,8 +8,9 @@
 	<http security="none" pattern="/resources/**"/>
     <!-- enable use-expressions -->
 	<http auto-config="true">
-		<intercept-url pattern="/re0001/**" access="permitAll"/>
-		<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"/>
+		<intercept-url pattern="/member/**" access="hasRole('ROLE_MEMBER')"/>
+		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+		<intercept-url pattern="/**" access="hasRole('permitAll')"/>
 		<!-- access denied page -->
 		<access-denied-handler error-page="/re0001/403" />
 		<!-- if user doesn't logged -->
