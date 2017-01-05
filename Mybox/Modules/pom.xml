@@ -23,7 +23,7 @@
 	</parent>
 	<modules>
 		<module>System</module>
-		<module>RealEstateWeb</module>
+<!-- 		<module>RealEstateWeb</module> -->
 	</modules>
 	<groupId>com.myboxteam</groupId>
 	<version>0.0.1-SNAPSHOT</version>
