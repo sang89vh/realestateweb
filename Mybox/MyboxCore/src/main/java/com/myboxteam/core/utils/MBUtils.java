@@ -143,8 +143,7 @@ public class MBUtils {
 		return YYYYMMDD_DATE_FORMAT.format(myDate);
 	}
 	
-	public static List<Map<String, Object>> convertListParseToMap(List<ParseObject> data)
-			throws JsonParseException, JsonMappingException, IOException {
+	public static List<Map<String, Object>> convertListParseToMap(List<ParseObject> data) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		if(null ==data){
 			return list;

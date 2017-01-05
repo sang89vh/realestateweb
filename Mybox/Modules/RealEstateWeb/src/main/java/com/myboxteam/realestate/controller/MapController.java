@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.myboxteam.core.controller.MBBaseController;
+import com.myboxteam.core.utils.MBUtils;
 import com.myboxteam.realestate.model.RePlace;
 
 @Controller
@@ -47,7 +48,7 @@ public class MapController extends MBBaseController {
 		return data;
 	}
 	@RequestMapping(value = "/search-place2", method = RequestMethod.GET)
-	public @ResponseBody List<JSONObject> searchPlace3() throws ParseException {
+	public @ResponseBody List<Map<String, Object>> searchPlace3() throws ParseException {
 //		ParseObject gameScore = new ParseObject("RePlace");
 //		gameScore.put("title", "House 1");		
 //		ParseGeoPoint point = new ParseGeoPoint(21.040165999999998, 105.79480189999999);
@@ -67,12 +68,8 @@ public class MapController extends MBBaseController {
 		System.out.println("place size =============");
 		System.out.println(places.size());
 		System.out.println("=============");
-		List<JSONObject> data = new ArrayList<JSONObject>();
 		
-		for (ParseObject parseObject : places) {
-			data.add(parseObject.getParseData());
-		}
 		
-		return data;
+		return MBUtils.convertListParseToMap(places);
 	}
 }
