@@ -1,5 +1,6 @@
 package com.myboxteam.core.utils;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,7 +11,11 @@ import java.util.Map;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.parse4j.ParseObject;
 import org.springframework.util.StringUtils;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class MBUtils {
 	private static final Logger logger = LogManager.getLogger(MBUtils.class);
@@ -136,6 +141,21 @@ public class MBUtils {
 	
 	public static String convertDateToStrYYYYMMDD(Date myDate) {
 		return YYYYMMDD_DATE_FORMAT.format(myDate);
+	}
+	
+	public static List<Map<String, Object>> convertListParseToMap(List<ParseObject> data)
+			throws JsonParseException, JsonMappingException, IOException {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		if(null ==data){
+			return list;
+		}
+		for (ParseObject parseObject : data) {
+			Map<String, Object> map = parseObject.getData();
+			map.put("objectId", parseObject.getObjectId());
+			list.add(map);
+		}
+
+		return list;
 	}
 	
 }

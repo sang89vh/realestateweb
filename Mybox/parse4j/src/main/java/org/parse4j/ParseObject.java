@@ -733,4 +733,14 @@ public class ParseObject {
 			setUpdatedAt(Parse.parseDate(value.toString()));
 		}		
 	}
+
+	public Map<String, Object> getData() {
+		return data;
+	}
+
+	public void setData(Map<String, Object> data) {
+		this.data = data;
+	}
+	
+	
 }
