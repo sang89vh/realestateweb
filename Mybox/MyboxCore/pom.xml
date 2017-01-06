@@ -112,11 +112,18 @@
 			<groupId>postgresql</groupId> <artifactId>postgresql</artifactId> <version>9.4.1208-jdbc42-atlassian-hosted</version> 
 			</dependency> -->
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>mysql</groupId> -->
+<!-- 			<artifactId>mysql-connector-java</artifactId> -->
+<!-- 			<version>6.0.5</version> -->
+<!-- 		</dependency> -->
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>6.0.5</version>
+			<version>5.1.40</version>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.bgee.log4jdbc-log4j2</groupId>
@@ -363,7 +370,7 @@
 			<email>sang89vh@gmail.com</email>
 		</developer>
 	</developers>
-<build>
+	<build>
 		<finalName>FDemo</finalName>
 		<pluginManagement>
 			<plugins>
