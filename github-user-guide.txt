@@ -1,0 +1,94 @@
+1. Project: PICS-IGR
+   + upstream: https://github.com/picsauditing/pics-igr.git or https://github.com/picsauditing/pics-igr
+   + origin (fork): https://github.com/{username}/pics-igr.git or https://github.com/{username}/pics-igr
+   + local: C:\dev\pics-igr\ 
+
+2. Step to clone project
+   2.1 Fork project:
+       + Go to: https://github.com/picsauditing/pics-igr
+       + Click button "Fork" on the top right window
+       + Browser will redirect to: https://github.com/{username}/pics-igr
+   2.2 Using Sourcetree:
+       + Click menu "Clone/New" on top left
+       + On popup input as following:
+         - Source Path / URL: https://github.com/{username}/pics-igr.git or https://github.com/{username}/pics-igr
+	 - Destination Path: C:\dev\pics-igr\
+	 - Click "Clone" and wait
+	 - When clone done create new Remote name: "upstream" -> Right click on "Remotes" then choose "New Remote"
+	 - Click "Add"
+	 - Input "Remote name": "upstream", "URL/Path": https://github.com/picsauditing/pics-igr.git or https://github.com/picsauditing/pics-igr
+	 - Click Ok to finish
+   2.3 Using SmartGit:
+       + Click menu "Repository" and choose "Clone"
+       + Input: Repository URL: https://github.com/{username}/pics-igr.git or https://github.com/{username}/pics-igr -> Next 
+       + Input: Path: C:\dev\pics-igr\ -> Finish
+       + When clone done create new Remote name: "upstream" -> Click menu "Remote" -> "Add..."
+       + Input: URL or Path: https://github.com/picsauditing/pics-igr.git or https://github.com/picsauditing/pics-igr, Name: upstream
+       + Click "Add" to finish.
+
+3. Pull/Push Code - Pull Request
+   3.1 Using Sourcetree
+       + Pull:
+         - Check out branch "master" on local
+         - Right click on "upstream" and choose "Pull from upstream"
+         - On popup click "refresh" then choose "master" in "Remote branch to pull"
+         - Choose 3 first option then click "Ok"
+         - After success click menu "Push" -> Ok to sync code: upstream, origin, local
+       + Commit/Push:
+         - Change any project file in local
+	 - Go to Sourcetree then right click on "Branches" and choose "New Branch"
+	 - Input branch name, format like that: feature-xxx. EX: "feature-US100-GetUserList" "feature-DE100-FixUIIssue"...
+	 - Create branch then checkout
+	 - Click menu "Commit" then insert comment -> Ok
+	 - Right click on that branch and choose "Push to" -> origin -> Done
+       + Pull Request
+	 - Go to: https://github.com/picsauditing/pics-igr and click "Compare and pull request"
+	 - Insert comment specify what changes and pull request -> Done
+   3.2 Using Smartgit
+       + Pull:
+         - Check out branch "master" on local
+         - Right click on "upstream" and choose "Pull..."
+         - On popup click "Fetch only"
+         - Right click again on "upstream" and choose "Push to" -> Ok
+	 - Right click on "origin" and choose "Pull" -> "Pull" to sync code: upstream, origin, local
+       + Commit/Push:
+         - Change any project file in local
+	 - Go to Smartgit then right click on "Local Branches" and choose "Add Branch"
+	 - Input branch name, format like that: feature-xxx. EX: "feature-US100-GetUserList" "feature-DE100-FixUIIssue"...
+	 - Click "Add branch & Checkout"
+	 - Click menu "Commit" then insert comment -> Commit
+	 - Right click on that branch and choose "Push to" -> origin -> Done
+       + Pull Request
+	 - Go to: https://github.com/picsauditing/pics-igr and click "Compare and pull request"
+	 - Insert comment specify what changes and pull request -> Done
+
+4. Basic rules
+   + Dont create "pics-igr" folder before clone the source   
+   + Before change anything in local, make sure that local source is up-to-date with upstream: https://github.com/picsauditing/pics-igr
+   + Use only 1 branch for 1 pull request. once pull request was merged let delete it from local and fork(origin)
+   + Branch name format must be: feature-xxx (xxx is name of what US, DE, TA you working on)
+   + Commit's comment should be start with US/DE Name + TA you working on: ex: "US-100/De-100 TA 555: Update Rest API to get the client requirement"
+   + Remember to check the code difference again when create pull request.
+
+5.  . Github workflow with GUI:
+               +------------------------+ pull request +----------------+
+               | upstream (picsauditing)|<-------------| origin (forked)|
+               +------------------------+     [5]      +----------------+
+                                         \            / push  [4]
+                        [1]  fetch latest \          / pushTo, then pull  [2]
+                                         +----------+
+                     | local    | checkout new branch, modifying then commit  [3]
+                                         +----------+
+
+
+
+
+1) Log into github.com with your credentials
+2) Fork picsorg:   Goto https://github.com/picsauditing/picsorg and click Fork on the top right 
+3) Clone your origin:   git clone git@github.com:<username>/picsorg.git
+4) Add upstream:   git remote add upstream git@github.com:picsauditing/picsorg.git
+5) Fetch upstream:    git fetch upstream
+6) Create a branch:   git checkout -B eg (-B removes it if exists, you can use -b)
+7) push to origin and track: git push -u origin eg  (-u tracks it)
+8) get eg from upstream:  git pull upstream eg
+9) push it to your origin: git push origin eg
