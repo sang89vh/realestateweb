@@ -11,7 +11,7 @@
 <script type="text/javascript"> 
 	var ctx = "<%=request.getContextPath()%>";
 </script>
-<link  href="${ctx}/resources/css/fdemo.css" rel="stylesheet" type="text/css" />
+<link  href="${ctx}/resources/css/mybox.css" rel="stylesheet" type="text/css" />
 <link  href="${ctx}/resources/css/sweetalert.css" rel="stylesheet" type="text/css" />
 <link  href="${ctx}/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link  href="${ctx}/resources/css/pace.css" rel="stylesheet" type="text/css" />
