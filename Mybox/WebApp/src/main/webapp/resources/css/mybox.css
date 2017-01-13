@@ -1,1 +1,18 @@
 @CHARSET "UTF-8";
+*, *:before, *:after {
+	box-sizing: border-box;
+}
+
+.news-container .row {
+	/* column width */
+	-moz-column-width: 19em;
+	-webkit-column-width: 19em;
+	/* space between columns */
+	-moz-column-gap: 1em;
+	-webkit-column-gap: 1em;
+}
+
+.news-container .item {
+	display: inline-block;
+	width: 100%;
+}
