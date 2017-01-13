@@ -26,7 +26,7 @@ import com.myboxteam.realestate.model.RePlace;
 @RequestMapping("/map")
 public class MapController extends MBBaseController {
 
-	@RequestMapping(value = "/search-place", method = RequestMethod.GET)
+	@RequestMapping(value = "/search-place")
 	public @ResponseBody List<Map<String, Object>> searchPlace(
 			@ModelAttribute("geoBox") GeoBox geoBox,
 			@RequestParam(value="skip",required=false,defaultValue="0") Integer skip)
