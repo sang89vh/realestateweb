@@ -1,16 +1,11 @@
 
     <style>
-      html,
-      body {
-        font-family: Arial, sans-serif;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
+
       #map {
         height: 100%;
       }
     </style>
+    <div class="row">
 		<div class="form-group">
         	<div class="input-group">
             	<input class="form-control" id="search-location-text" type="search" placeholder="Search for places">
@@ -20,8 +15,22 @@
                 </span>
         	</div>
         </div>
-	
-    <div id="map" style="width: 100%; height: 500px"></div>
+	</div>
+	<div class="row" >
+		<div class="col-md-5 news-container" style="height: 500px;overflow-y: scroll;">
+			<div class="row" id="new-row"></div>
+		</div>
+    	<div class="col-md-7">
+    		<div id="map" class="col-md-7" style="width:100%;height: 500px"></div>
+    	</div>
+    </div>
+    <div id="temp-row" style="display: none;">
+		<div class="item well">
+			<img alt="" src="" style="width: 100%;height: auto;">
+			<a></a>
+			<p></p>
+		</div>
+	</div>
     <script>
      var map;
 	 var houseMarkers = [];
@@ -141,6 +150,7 @@
 			cache:false,
 			suppressErrors:false,
 			success: function(data, textStatus, jqXHR) {
+				showNews(data);
 				$.each(data, function(index, item){
 					 var marker = new google.maps.Marker({
 						 	map: map,
@@ -184,7 +194,24 @@
 	    	 houseMarkers[i].setMap(null);
 		 };   
 	}
-	
+	var showNews = function(data){
+		var $newsRow = $("#new-row");
+		$newsRow.html('');
+		$.each(data,function(index,item){
+			var temp=$("#temp-row").find(".item").clone();
+			var $img = $(temp.find("img")[0]);
+			$img.attr("src",item.thumbs[0]);
+			
+			var $title = $(temp.find("a")[0]);
+			$title.text(item.title)
+			
+			var $content = $(temp.find("p")[0]);
+			$content.html(item.address)
+			
+			$newsRow.append(temp);
+			
+		})
+	}
     </script>
 
     <script

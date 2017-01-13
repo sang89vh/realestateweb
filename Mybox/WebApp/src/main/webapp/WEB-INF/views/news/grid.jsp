@@ -1,25 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/layout/taglib.jsp"%>
-<style type="text/css">
-*, *:before, *:after {
-	box-sizing: border-box;
-}
-
-.news-container .row {
-	/* column width */
-	-moz-column-width: 19em;
-	-webkit-column-width: 19em;
-	/* space between columns */
-	-moz-column-gap: 1em;
-	-webkit-column-gap: 1em;
-}
-
-.news-container .item {
-	display: inline-block;
-	width: 100%;
-}
-</style>
 <script type="text/javascript">
 	var searchNews = function(prm){
 		$.post(ctx + "/map/search-place", prm, function(data) {
