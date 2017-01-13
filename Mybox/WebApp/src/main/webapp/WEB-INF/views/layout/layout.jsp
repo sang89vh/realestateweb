@@ -10,7 +10,7 @@
 	<div class="row">
 			<tiles:insertAttribute name="menu" />
 	</div>
-<!-- 	<div class="container"> -->
+<!-- 	<div class="container bs-docs-container"> -->
 	<div >
 		<div class="col-md-12">
 		<div class="row">
