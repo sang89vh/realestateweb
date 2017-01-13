@@ -16,3 +16,9 @@
 	display: inline-block;
 	width: 100%;
 }
+
+.table caption{
+	    text-align: left;
+    font-weight: bold;
+    font-size: larger;
+}
