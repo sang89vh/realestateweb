@@ -185,6 +185,9 @@ $(document).ready(function(){
 </div>
 		
 	<div class="col-md-12">
+		<p>${news.content}</p>
+	</div>
+	<div class="col-md-12">
 		<h6>Tiện ích xung quanh</h6>	
 		<div class="col-md-6" style="    height: 420px;overflow-y: scroll;">
 				<table class="table">
