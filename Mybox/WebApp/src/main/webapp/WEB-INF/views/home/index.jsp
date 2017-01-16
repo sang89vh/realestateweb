@@ -38,8 +38,7 @@
      var map;
 	 var houseMarkers = [];
 	 var baseMarkers = [];
-	 var locations = [];
-	 var marker;
+	 
 	 function initMap() {		 
 	     map = new google.maps.Map(document.getElementById('map'), {
 	       //center: {lat: -34.397, lng: 150.644},
@@ -51,7 +50,7 @@
 	   	 findCurrentPos();
 	   	 
 	   	 map.addListener('idle', function() {
-	   		
+	   	 if (map.getBounds() != null){
 	   		var bound = {
 	   				southwestLatitude: map.getBounds().f.f,
 	   				southwestLongitude: map.getBounds().b.b,
@@ -60,6 +59,7 @@
 	   			}
 	   		//console.log(map.getBounds());
 	   		loadRentHouses(bound);
+	   	 }		   		
 	     });
 	   	searchLocations();
 	        
@@ -146,7 +146,8 @@
 				  origin: new google.maps.Point(0,0), // origin
 				  anchor: new google.maps.Point(0, 0), // anchor
 				};
-		
+
+		var locations = [];
 		$.ajax({ 
 			url: ctx + '/map/search-place' , 
 			//type: 'post', 
@@ -154,34 +155,13 @@
 			cache:false,
 			suppressErrors:false,
 			success: function(data, textStatus, jqXHR) {
-				showNews(data);
-				$.each(data, function(index, item){
-					 marker = new google.maps.Marker({
-						 	map: map,
-				            position: {lat:item.location.latitude, lng:item.location.longitude},
-				            title: item.title,
-							icon: iconHousePos,
-				            id: item.objectId,
-				            label: "Marker A"
-				          });
-					 houseMarkers.push(marker);
-					// Create a single infowindow to be used with the place details information
-			        // so that only one is open at once.
-			          var placeInfoWindow = new google.maps.InfoWindow();
-			          // If a marker is clicked, do a place details search on it in the next function.
-			          marker.addListener('click', function() {
-			            if (placeInfoWindow.marker == this) {
-			              console.log("This infowindow already is on this marker!");
-			            } else {
-			            	placeInfoWindow.setContent('aaaaaaaaaaaaaa');
-			            	placeInfoWindow.open(map, marker);
-			                // Make sure the marker property is cleared if the infowindow is closed.
-			                placeInfoWindow.addListener('closeclick', function() {
-			                	placeInfoWindow.marker = null;
-			                });
-			            }
-			          });
-				});			
+				var $newsRow = $("#new-row");
+				$newsRow.html('');
+				$.each(data, function(index, item){					
+					showNews($newsRow,item);
+					attachInfo(item);
+				});
+				autoClick();
 			},complete: function(){
 				return true;		
 			},error : function(request, status, error,event){
@@ -190,6 +170,54 @@
 		});
 	}
 	
+	var autoClick = function(){
+		$("#new-row .item").on("mouseover",function(){
+			var obj =$(this).data();
+			$.each(houseMarkers, function(index, item){
+				if (item.id === obj.objectId){
+					google.maps.event.trigger(item, 'click');
+				} 
+				else {
+					item.infowindow.close();	
+				}
+			});
+		});
+	};
+	
+	var attachInfo = function(obj){
+		var iconHousePos = {
+				  url: ctx + "/resources/img/icons/map/housePos.ico", // url
+				  scaledSize: new google.maps.Size(40,40), // scaled size
+				  origin: new google.maps.Point(0,0), // origin
+				  anchor: new google.maps.Point(0, 0), // anchor
+				};
+		var placeInfoWindow = new google.maps.InfoWindow();
+		var marker = new google.maps.Marker({
+		 	map: map,
+            position: {lat:obj.location.latitude, lng:obj.location.longitude},
+            title: obj.title,
+			icon: iconHousePos,
+            id: obj.objectId,
+            infowindow: placeInfoWindow,
+            label: "Marker A"
+          });
+	 houseMarkers.push(marker);
+	// Create a single infowindow to be used with the place details information
+    // so that only one is open at once.
+      // If a marker is clicked, do a place details search on it in the next function.
+      marker.addListener('click', function() {
+        if (placeInfoWindow.marker == this) {
+          console.log("This infowindow already is on this marker!");
+        } else {
+        	placeInfoWindow.setContent('aaaaaaaaaaaaaa');
+        	placeInfoWindow.open(map, marker);
+            // Make sure the marker property is cleared if the infowindow is closed.
+            placeInfoWindow.addListener('closeclick', function() {
+            	placeInfoWindow.marker = null;
+            });
+        }
+      });
+	}
 	var cleanMakers = function(){
 		 for (var i = 0; i < baseMarkers.length; i++) {
 			 baseMarkers[i].setMap(null);
@@ -198,32 +226,29 @@
 	    	 houseMarkers[i].setMap(null);
 		 };   
 	}
-	var showNews = function(data){
-		var $newsRow = $("#new-row");
-		$newsRow.html('');
-		$.each(data,function(index,item){
+	var showNews = function(newsRow,obj){
 			var temp=$("#temp-row").find(".item").clone();
-			
+			temp.data(obj);
 			var $img = $(temp.find("img")[0]);
-			$img.attr("src",item.thumbs[0]);
+			$img.attr("src",obj.thumbs[0]);
 			
 			var $a = $(temp.find("a")[0]);
-			$a.attr("href",ctx+"/news/property/"+item.objectId);
+			$a.attr("href",ctx+"/news/property/"+obj.objectId);
 			
 			var $price = $(temp.find(".price")[0]);
-			$price.text(item.price)
+			$price.text(obj.price)
 			
 			
 			var $info = $(temp.find(".info")[0]);
-			$info.html(item.acreage)
+			$info.html(obj.acreage)
 			
 			var $address = $(temp.find(".address")[0]);
-			$address.html(item.address)
+			$address.html(obj.address)
 			
-			$newsRow.append(temp);
-			
-		})
+			newsRow.append(temp);
 	}
+	
+	
     </script>
 
     <script
