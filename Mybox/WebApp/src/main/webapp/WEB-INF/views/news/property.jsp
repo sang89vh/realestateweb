@@ -28,13 +28,7 @@ var drawGrid = function(obj) {
 						pageButtonCount : 5,
 						rowClick : function(row) {
 							console.log(row.item);
-							
-							buildForm(row.item);
-							searchYts(row.item.title);
-							 $("#status_action").html("doing");
-							video =row.item;
-							
-
+							location.href=ctx+"/news/property/"+row.item.objectId
 						},
 						deleteConfirm : "Do you really want to delete the client?",
 
@@ -142,39 +136,48 @@ $(document).ready(function(){
 	  	</div>
 	  	<div class="row">
 			<table class="table">
-				<caption>${news.title}</caption>
+				<h6>${news.title}</h6>
 				<tbody>
+				<c:if test="${news.acreage!=null or news.price!=null }">
 					<tr>
 						<th >Diện tích</th>
 						<td>${news.acreage}</td>
 						<td>Giá</td>
 						<td>${news.price}</td>
 					</tr>
+				</c:if>
+				<c:if test="${news.toilet!=null or news.kitchen!=null}">
 					<tr>
 						<th >Nhà vệ sinh</th>
 						<td>${news.toilet}</td>
 						<td>Bếp</td>
 						<td>${news.kitchen}</td>
 					</tr>
+				</c:if>
+				<c:if test="${ (not empty news.kitchen) or (not empty news.dryingYard) }">
 					<tr>
 						<th >Sân phơi</th>
 						<td>${news.kitchen}</td>
 						<td>Phòng khách</td>
 						<td>${news.dryingYard}</td>
 					</tr>
+				</c:if>
+				<c:if test="${ (not empty news.direction) or (not empty news.bedRoom) }">
 					<tr>
 						<th >Hướng nhà</th>
-						<td></td>
+						<td>${news.direction}</td>
 						<td>Phòng ngủ</td>
 						<td>${news.bedRoom}</td>
 					</tr>
+				</c:if>
+				<c:if test="${ (not empty news.startDateLabel) or (not empty news.endDate)}">
 					<tr>
 						<th >Ngày đăng tin</th>
 						<td>${news.startDateLabel}</td>
 						<td>Hết hạn</td>
 						<td>${news.endDate}</td>
 					</tr>
-					
+				</c:if>
 				</tbody>
 			</table>
 	</div>
