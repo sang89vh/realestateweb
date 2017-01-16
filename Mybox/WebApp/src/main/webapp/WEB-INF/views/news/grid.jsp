@@ -11,19 +11,27 @@
 	}
 	var showNews = function(data){
 		var $newsRow = $("#new-row");
+		$newsRow.html('');
 		$.each(data,function(index,item){
 			var temp=$("#temp-row").find(".item").clone();
+			
 			var $img = $(temp.find("img")[0]);
 			$img.attr("src",item.thumbs[0]);
 			
-			var $title = $(temp.find("a")[0]);
-			$title.text(item.title)
+			var $a = $(temp.find("a")[0]);
+			$a.attr("href",ctx+"/news/property/"+item.objectId);
 			
-			var $content = $(temp.find("p")[0]);
-			$content.html(item.address)
+			var $price = $(temp.find(".price")[0]);
+			$price.text(item.price)
 			
-			$newsRow.html(temp);
 			
+			var $info = $(temp.find(".info")[0]);
+			$info.html(item.acreage)
+			
+			var $address = $(temp.find(".address")[0]);
+			$address.html(item.address)
+			
+			$newsRow.append(temp);
 			
 		})
 	}
@@ -44,10 +52,12 @@
 	<div class="row" id="new-row"></div>
 </div>
 <div id="temp-row" style="display: none;">
-	<div class="item well">
-		<img alt="" src="">
-		<a></a>
-		<p></p>
+		<div class="item well">
+			<a href="#">
+				<img alt="" src="" style="width: 100%;height: auto;">
+			</a>
+			<b class="price" ></b><br/>
+			<span class="info"></span><br/>
+			<span class="address"></span><br/>
+		</div>
 	</div>
-
-</div>

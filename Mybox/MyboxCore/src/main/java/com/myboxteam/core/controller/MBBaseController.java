@@ -1,14 +1,19 @@
 package com.myboxteam.core.controller;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
-import com.myboxteam.core.config.MBConfig;
 
 public class MBBaseController {
+	
+	protected static final Logger logger = LogManager.getLogger(MBBaseController.class);
 	@Autowired
 	protected MessageSource messageSource;
+	
+	@Autowired
+	protected PrettyTime prettyTime;
 	
 	
 }
