@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
@@ -28,8 +29,9 @@ import org.parse4j.ParseObject;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 public class MBUtils {
+	private static PrettyTime prettyTime = new PrettyTime(new Locale("vi"));
+	
 	private static final Logger logger = LogManager.getLogger(MBUtils.class);
 	private static final SimpleDateFormat YYYYMMDD_DATE_FORMAT = new SimpleDateFormat(
 			"yyyyMMdd");
@@ -42,9 +44,9 @@ public class MBUtils {
 			"dd/MM/yyyy");
 	private static final SimpleDateFormat YYYY_MM_DD_DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd");
+	private static final SimpleDateFormat DDhpMM_YYYY_DATE_FORMAT = new SimpleDateFormat(
+			"dd-MM-yyyy");
 
-	public static PrettyTime prettyTime = new PrettyTime();
-	// public static PrettyTime prettyTime = new PrettyTime(new Locale("vi"));
 	public static ObjectMapper mapperJackson = new ObjectMapper();
 	private static char[] SPECIAL_CHARACTERS = {
 			// ' ',
@@ -357,6 +359,17 @@ public class MBUtils {
 		}
 
 		return list;
+	}
+	public static String convertDateToPrettyTime(Object myDate) throws ParseException{
+		if(null==myDate){
+			return "";
+		}else if(myDate instanceof String){
+			return prettyTime.format(DDhpMM_YYYY_DATE_FORMAT.parse(((String)myDate)));
+		}else if(myDate instanceof Date){
+			return prettyTime.format((Date)myDate);
+		}
+		return "";
+		
 	}
 
 }

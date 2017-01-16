@@ -7,11 +7,9 @@ import org.parse4j.ParseException;
 import org.parse4j.ParseGeoPoint;
 import org.parse4j.ParseObject;
 import org.parse4j.ParseQuery;
-import org.parse4j.util.ParseRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.myboxteam.core.controller.MBBaseController;
 import com.myboxteam.core.utils.MBUtils;
 import com.myboxteam.realestate.form.GeoBox;
-import com.myboxteam.realestate.model.RePlace;
+import com.myboxteam.realestate.form.LocationForm;
 
 @Controller
 @SessionAttributes("map")
@@ -31,8 +29,6 @@ public class MapController extends MBBaseController {
 			@ModelAttribute("geoBox") GeoBox geoBox,
 			@RequestParam(value="skip",required=false,defaultValue="0") Integer skip)
 			throws ParseException {
-
-		ParseRegistry.registerSubclass(RePlace.class);
 
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("RePlace");
 		// query.whereEqualTo("playerName", "Dan Stemkoski");
@@ -48,6 +44,29 @@ public class MapController extends MBBaseController {
 
 		return MBUtils.convertListParseToMap(places);
 
+	}
+	@RequestMapping(value = "/near-place")
+	public @ResponseBody List<Map<String, Object>> nearPlace(
+			@ModelAttribute("locationForm") LocationForm locationForm,
+			@RequestParam(value="skip",required=false,defaultValue="0") Integer skip)
+					throws ParseException {
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("RePlace");
+		// query.whereEqualTo("playerName", "Dan Stemkoski");
+//		 106.6924142, 
+//	        10.7683017
+		ParseGeoPoint geo=new ParseGeoPoint(locationForm.getLatitude(),locationForm.getLongitude());
+//		query.whereWithinKilometers("location",geo,10);
+		query.whereNear("location",geo);
+//		query.skip(skip);
+//		query.limit(200);
+		List<ParseObject> places = query.find();
+		System.out.println("======skip=======");
+		System.out.println(skip);
+		System.out.println("=================");
+		
+		return MBUtils.convertListParseToMap(places);
+		
 	}
 
 	
