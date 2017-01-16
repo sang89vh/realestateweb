@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/layout/taglib.jsp"%>
+  <style>
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      width: 70%;
+      margin: auto;
+  }
+  </style>
 <script type="text/javascript">
 
 var drawGrid = function(obj) {
@@ -104,32 +111,36 @@ $(document).ready(function(){
 		</div>
 	</div>
 	<div class="col-md-8">
-		<div class="row"
-			style="height: 350px;background-image: url(${news.thumbs[0]});background-repeat: no-repeat;background-size:cover">
-			<div class="row" style="height: 300px">
-				<div style="display: none;">
-					<c:forEach var="imgUrl" items="${news.thumbs}">
-						<a class="fffancybox" rel="fancybox-button" href="${imgUrl}"><img
-							src="${imgUrl}" alt="" /></a>
-					</c:forEach>
-				</div>
-			</div>
-			<div class="row" style="height: 50px">
-				<div class="col-md-10"></div>
-				<div class="col-md-1">
-					<a class="fffancybox" rel="group1"> <img alt=""
-						src="${ctx}/resources/img/home.jpg" class="img-thumbnail">
-					</a>
-				</div>
-				<div class="col-md-1">
-					<a> <img alt=""
-						src="${ctx}/resources/img/map_icon_70x70_txl2.png"
-						class="img-thumbnail">
-					</a>
-				</div>
-			</div>
-		</div>
-		<div class="row">
+		<div class="row" style="height: 400px!important;">
+				<div id="myCarousel" class="carousel slide" data-ride="carousel">
+					 <ol class="carousel-indicators">
+						<c:forEach var="imgUrl" items="${news.thumbs}" varStatus="loop">
+							<li data-target="#myCarousel" data-slide-to="${loop.index}" class='${loop.index==0?"active":""}'></li>
+						</c:forEach>
+					 </ol>
+				 <!-- Wrapper for slides -->
+			    <div class="carousel-inner" role="listbox">
+			    
+			    <c:forEach var="imgUrl" items="${news.thumbs}" varStatus="loop">
+			      <div class='item ${loop.index==0?"active":""}'>
+			        <img src="${imgUrl.replace("200x200", "745x510")}" height="400px" style="height: 400px!important">
+			      </div>
+				</c:forEach>
+			    
+			    </div>
+			
+			    <!-- Left and right controls -->
+			    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+			      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+			      <span class="sr-only">Previous</span>
+			    </a>
+			    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+			      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+			      <span class="sr-only">Next</span>
+			    </a>
+		  	</div>
+	  	</div>
+	  	<div class="row">
 			<table class="table">
 				<caption>${news.title}</caption>
 				<tbody>
@@ -166,10 +177,10 @@ $(document).ready(function(){
 					
 				</tbody>
 			</table>
-
-		</div>
-		
 	</div>
+	</div>
+</div>
+		
 	<div class="col-md-12">
 		<h6>Tiện ích xung quanh</h6>	
 		<div class="col-md-6" style="    height: 420px;overflow-y: scroll;">
