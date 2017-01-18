@@ -45,6 +45,18 @@ public class MapController extends MBBaseController {
 		return MBUtils.convertListParseToMap(places);
 
 	}
+	@RequestMapping(value = "/get-polygon")
+	public @ResponseBody List<Map<String, Object>> polygon(
+			@RequestParam(value="name",required=true) String name)
+			throws ParseException {
+
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("kml");
+		query.whereContains("keyword", name);
+		List<ParseObject> places = query.find();
+
+		return MBUtils.convertListParseToMap(places);
+
+	}
 	@RequestMapping(value = "/near-place")
 	public @ResponseBody List<Map<String, Object>> nearPlace(
 			@ModelAttribute("locationForm") LocationForm locationForm,
