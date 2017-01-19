@@ -51,7 +51,7 @@ public class MapController extends MBBaseController {
 			throws ParseException {
 
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("kml");
-		query.whereContains("keyword", name);
+		query.whereContains("keyword", MBUtils.removeAccent(name).toLowerCase());
 		List<ParseObject> places = query.find();
 
 		return MBUtils.convertListParseToMap(places);
