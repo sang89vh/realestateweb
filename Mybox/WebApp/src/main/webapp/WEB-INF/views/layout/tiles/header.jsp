@@ -27,6 +27,7 @@
 <!-- Optionally add helpers - button, thumbnail and/or media -->
 <link   href="${ctx}/resources/css/jquery.fancybox-buttons.css" rel="stylesheet" type="text/css" />
 <link   href="${ctx}/resources/css/jquery.fancybox-thumbs.css" rel="stylesheet" type="text/css" />
+<link   href="${ctx}/resources/css/bootstrap-select.css" rel="stylesheet" type="text/css" />
 
 <link  href="${ctx}/resources/css/realestate.css" rel="stylesheet" type="text/css" />
 
@@ -48,6 +49,7 @@
 <script type="text/javascript" src="${ctx}/resources/js/jquery.fancybox-buttons.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/jquery.fancybox-media.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/jquery.fancybox-thumbs.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/bootstrap-select.js"></script>
 
 <script type="text/javascript" src="${ctx}/resources/js/realestate.js"></script>
 
