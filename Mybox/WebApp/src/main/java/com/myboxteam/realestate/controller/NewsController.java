@@ -63,4 +63,14 @@ public class NewsController extends MBBaseController{
 		mav.setViewName("news/property");
 		return mav;
 	}
+	
+	@RequestMapping("/dang-tin")
+	public ModelAndView create(ModelAndView mav, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		mav.setViewName("news/create");
+		return mav;
+	}
+	
+	
 }
