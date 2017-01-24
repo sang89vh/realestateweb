@@ -13,6 +13,7 @@ function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
      	zoom: 15
      });
+	//var c = ${news};
 	var lat = ${latitude};
 	var lng = ${longitude};
 	var targetPos = {
@@ -21,18 +22,29 @@ function initMap() {
     };
 	map.setCenter(targetPos);
 	
+	var iconTargetPos = {
+			  url: ctx + "/resources/img/icons/map/selectedHousePos.ico", // url
+			  scaledSize: new google.maps.Size(40,40), // scaled size
+			  origin: new google.maps.Point(0,0), // origin
+			  anchor: new google.maps.Point(0, 0), // anchor
+			};
+	
 	var markerTargetPos = new google.maps.Marker({
 	 	map: map,
-        //position: {lat:obj.location.latitude, lng:obj.location.longitude},
-        title: obj.title,
-		icon: iconHousePos,
-        id: obj.objectId,
-        infowindow: placeInfoWindow,
+        position: {lat: lat, lng:lng},
+        //title: obj.title,
+		icon: iconTargetPos,
+        //id: news.objectId,
+        //infowindow: placeInfoWindow,
         //label: "Marker A"
       });
 	
 	var baseLat = ${baseLat};
 	var baseLng = ${baseLng};
+	var markerBasePos = new google.maps.Marker({
+		map: map,
+        position: {lat: baseLat, lng: baseLng},
+	});
 	console.log(lat);
 }
 var searchLocations = function(){
@@ -125,7 +137,7 @@ $(document).ready(function(){
 
 })
 */
-$( document ).ready(function() {
+$(document).ready(function() {
 	searchLocations();
 });
 </script>
