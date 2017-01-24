@@ -33,14 +33,15 @@ public class NewsController extends MBBaseController{
 		mav.setViewName("news/grid");
 		return mav;
 	}
-	@RequestMapping("/property/{newUrl}")
+	
+	@RequestMapping("/property")
 	public ModelAndView property(ModelAndView mav, HttpServletRequest request,
-			HttpServletResponse response,
-			@PathVariable("newUrl") String newUrl) throws Exception {
+			HttpServletResponse response) throws Exception {
 		
+		String objId = request.getParameter("obj");
 		logger.info(MBUtils.convertDateToPrettyTime(MBUtils.getCurrentDate()));
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("RePlace");
-		ParseObject news = query.get(newUrl);
+		ParseObject news = query.get(objId);
 		
 		Map<String,Object> data=news.getData();	
 		Object formDate =data.get("fromDate");
@@ -60,9 +61,14 @@ public class NewsController extends MBBaseController{
 		mav.addObject("latitude",lo.getLatitude());
 		mav.addObject("longitude",lo.getLongitude());
 		
+		mav.addObject("baseLat",request.getParameter("lat"));
+		mav.addObject("baseLng",request.getParameter("lng"));
+		
 		mav.setViewName("news/property");
 		return mav;
 	}
+	
+
 	
 	@RequestMapping("/dang-tin")
 	public ModelAndView create(ModelAndView mav, HttpServletRequest request,
@@ -72,5 +78,5 @@ public class NewsController extends MBBaseController{
 		return mav;
 	}
 	
-	
+
 }
