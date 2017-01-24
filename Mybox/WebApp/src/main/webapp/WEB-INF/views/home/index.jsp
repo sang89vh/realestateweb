@@ -211,7 +211,7 @@
 	        	$.each(houseMarkers, function(index,item){
 	        		item.infowindow.close();
 	        	});
-	        	placeInfoWindow.setContent('aaaaaaaaaaaaaa');
+	        	placeInfoWindow.setContent(obj.objectId);
 	        	placeInfoWindow.open(map, marker);
 	            // Make sure the marker property is cleared if the infowindow is closed.
 	            placeInfoWindow.addListener('closeclick', function() {
