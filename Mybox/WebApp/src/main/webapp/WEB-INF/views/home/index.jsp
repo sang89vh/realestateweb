@@ -32,6 +32,7 @@
     var baseMarkers = [];
     var polygons = [];
     var searchBox;
+    var $newsRow = $("#new-row");
 
     var initMap = function() {	
 	    map = new google.maps.Map(document.getElementById('map'), {
@@ -153,10 +154,9 @@
 			cache:false,
 			suppressErrors:false,
 			success: function(data, textStatus, jqXHR) {
-				var $newsRow = $("#new-row");
 				$newsRow.html('');
 				$.each(data, function(index, item){					
-					showNews($newsRow,item);
+					showNews(item);
 					attachInfo(item);
 				});
 				autoClick();
@@ -169,7 +169,7 @@
 	}
 	
 	var autoClick = function(){
-		$("#new-row .item").on("mouseover",function(){
+		$("#new-row .item").on("mouseenter",function(){
 			var obj =$(this).data();
 			$.each(houseMarkers, function(index, item){
 				if (item.id === obj.objectId){
@@ -211,7 +211,8 @@
 	        	$.each(houseMarkers, function(index,item){
 	        		item.infowindow.close();
 	        	});
-	        	placeInfoWindow.setContent(obj.objectId);
+	        	//placeInfoWindow.setContent(obj.objectId);
+	        	placeInfoWindow.setContent(showNews(obj).html());
 	        	placeInfoWindow.open(map, marker);
 	            // Make sure the marker property is cleared if the infowindow is closed.
 	            placeInfoWindow.addListener('closeclick', function() {
@@ -221,7 +222,9 @@
       	});
 	}
 	
-	var showNews = function(newsRow,obj){
+	var showNews = function(obj){
+		console.log('show news');
+		console.log(obj);
 			var temp=$("#temp-row").find(".item").clone();
 			temp.data(obj);
 			if (obj.thumbs){
@@ -243,7 +246,8 @@
 			var $address = $(temp.find(".address")[0]);
 			$address.html(obj.address)
 			
-			newsRow.append(temp);
+			$newsRow.append(temp);
+			return temp;
 	}
 	
 	/*
