@@ -32,7 +32,6 @@
     var baseMarkers = [];
     var polygons = [];
     var searchBox;
-    var $newsRow = $("#new-row");
 
     var initMap = function() {	
 	    map = new google.maps.Map(document.getElementById('map'), {
@@ -58,9 +57,12 @@
 	    addListenerIdleToMap(map);   	
 	   	
 	};
+	
+	/*
 	 $( "#search-location" ).click(function() {	 
 		 searchLocations();
 	 });
+	*/
 	
 	 var findCurrentPos = function(){
 			cleanMap();		
@@ -120,12 +122,22 @@
 		                    console.log("Returned place contains no geometry");
 		                    return;
 		                  }
-		          	  baseMarkers.push(new google.maps.Marker({
+		          	    var searchMarker = new google.maps.Marker({
 		                    map: map,
 		                    //icon: icon,
 		                    title: place.name,
-		                    position: place.geometry.location
-		                  }));
+		                    position: place.geometry.location,
+		                    id: place.place_id
+		                  });
+		          	    var placeInfoWindow = new google.maps.InfoWindow();
+		          	    searchMarker.addListener('click', function() {
+		                 if (placeInfoWindow.marker == this) {
+		                   console.log("This infowindow already is on this marker!");
+		                 } else {
+		                	 getGGPlacesDetails(this, placeInfoWindow);
+		                 }
+		          	  });
+		          	  baseMarkers.push(searchMarker);
 		          	  findDistrictForMarker(baseMarkers[0]);
 		          	  if (place.geometry.viewport) {
 		                    // Only geocodes have viewport.
@@ -154,15 +166,17 @@
 			cache:false,
 			suppressErrors:false,
 			success: function(data, textStatus, jqXHR) {
+				var $newsRow = $("#new-row");
 				$newsRow.html('');
 				$.each(data, function(index, item){					
-					showNews(item);
+					$newsRow.append(showNews(item));
 					attachInfo(item);
 				});
 				autoClick();
 			},complete: function(){
 				return true;		
 			},error : function(request, status, error,event){
+				console.log('Error');
 				return false;
 			}
 		});
@@ -223,8 +237,6 @@
 	}
 	
 	var showNews = function(obj){
-		console.log('show news');
-		console.log(obj);
 			var temp=$("#temp-row").find(".item").clone();
 			temp.data(obj);
 			if (obj.thumbs){
@@ -245,19 +257,8 @@
 			
 			var $address = $(temp.find(".address")[0]);
 			$address.html(obj.address)
-			
-			$newsRow.append(temp);
 			return temp;
 	}
-	
-	/*
-	var addGoogleMapAPI = function(){
-		console.log('add api');
-		var script = document.createElement( 'script' );
-		script.src = "https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCcDHHuK_bGlftUhpq-MWo72JwD0-PYrv8&v=3&callback=initMap";
-		$(document).append( script );		
-	}
-	*/
 
 	
 	var cleanMap = function(){
@@ -274,6 +275,53 @@
 		houseMarkers = [];
 		polygons = [];
 	};
+	
+	// This is the PLACE DETAILS search - it's the most detailed so it's only
+    // executed when a marker is selected, indicating the user wants more
+    // details about that place.
+    var getGGPlacesDetails = function(marker, infowindow) {
+      var service = new google.maps.places.PlacesService(map);
+      service.getDetails({
+        placeId: marker.id
+      }, function(place, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+        	console.log('status OK');
+          // Set the marker property on this infowindow so it isn't created again.
+          infowindow.marker = marker;
+          var innerHTML = '<div>';
+          if (place.name) {
+            innerHTML += '<strong>' + place.name + '</strong>';
+          }
+          if (place.formatted_address) {
+            innerHTML += '<br>' + place.formatted_address;
+          }
+          if (place.formatted_phone_number) {
+            innerHTML += '<br>' + place.formatted_phone_number;
+          }
+          if (place.opening_hours) {
+            innerHTML += '<br><br><strong>Hours:</strong><br>' +
+                place.opening_hours.weekday_text[0] + '<br>' +
+                place.opening_hours.weekday_text[1] + '<br>' +
+                place.opening_hours.weekday_text[2] + '<br>' +
+                place.opening_hours.weekday_text[3] + '<br>' +
+                place.opening_hours.weekday_text[4] + '<br>' +
+                place.opening_hours.weekday_text[5] + '<br>' +
+                place.opening_hours.weekday_text[6];
+          }
+          if (place.photos) {
+            innerHTML += '<br><br><img src="' + place.photos[0].getUrl(
+                {maxHeight: 100, maxWidth: 200}) + '">';
+          }
+          innerHTML += '</div>';
+          infowindow.setContent(innerHTML);
+          infowindow.open(map, marker);
+          // Make sure the marker property is cleared if the infowindow is closed.
+          infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+          });
+        }
+      });
+    }
     </script>
 
 	<script
