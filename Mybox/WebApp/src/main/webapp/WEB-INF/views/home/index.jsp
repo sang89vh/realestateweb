@@ -32,6 +32,9 @@
     var baseMarkers = [];
     var polygons = [];
     var searchBox;
+    var $newsRow = $("#new-row");
+    var currentNews = [];
+    var oldBound;
 
     var initMap = function() {	
 	    map = new google.maps.Map(document.getElementById('map'), {
@@ -78,9 +81,10 @@
 		        //infoWindow.setContent('Location found.');
 				markerCurrentPos.setPosition(currentPos);
 		        map.setCenter(currentPos);
+		        oldBound = map.getBounds();
 		        baseMarkers.push(markerCurrentPos);
 		        findDistrictForMarker(markerCurrentPos);
-		        console.log(currentPos);
+		        //console.log(currentPos);
 		      }, function() {
 		        handleLocationError(true, infoWindow, map.getCenter());
 		      });
@@ -147,9 +151,11 @@
 		                  }
 		            })
 		            map.fitBounds(bounds);
-		   	 
+		            oldBound = map.getBounds();
 			 }) 
 		};
+		
+		
 	var loadRentHouses = function(obj){
 		var iconHousePos = {
 				  url: ctx + "/resources/img/icons/map/housePos.ico", // url
@@ -166,12 +172,24 @@
 			cache:false,
 			suppressErrors:false,
 			success: function(data, textStatus, jqXHR) {
-				var $newsRow = $("#new-row");
-				$newsRow.html('');
-				$.each(data, function(index, item){					
-					$newsRow.append(showNews(item));
-					attachInfo(item);
+				
+				//$newsRow.html('');
+				$.each(data, function(index, item){
+					var foundNews = false;
+					$.each(currentNews, function(index1,item1){
+						if (item1.objectId === item.objectId){
+							foundNews = true;
+							return false;
+						}
+					})
+					if (!foundNews){
+						$newsRow.append(showNews(item));
+						attachInfo(item);
+						currentNews.push(item);
+					}
+					
 				});
+				console.log(currentNews.length);
 				autoClick();
 			},complete: function(){
 				return true;		
@@ -274,6 +292,7 @@
 		baseMarkers = [];
 		houseMarkers = [];
 		polygons = [];
+		currentNews = [];
 	};
 	
 	// This is the PLACE DETAILS search - it's the most detailed so it's only
