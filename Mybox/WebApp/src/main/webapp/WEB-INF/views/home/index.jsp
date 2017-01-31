@@ -108,6 +108,7 @@
 		 
 		       // Listen for the event fired when the user selects a prediction and retrieve
 		       // more details for that place.
+		      
 		    searchBox.addListener('places_changed', function() {
 		  
 		   		console.log('place changed');
@@ -152,7 +153,8 @@
 		            })
 		            map.fitBounds(bounds);
 		            oldBound = map.getBounds();
-			 }) 
+			 })
+			 
 		};
 		
 		
@@ -205,11 +207,17 @@
 			var obj =$(this).data();
 			$.each(houseMarkers, function(index, item){
 				if (item.id === obj.objectId){
-					google.maps.event.trigger(item, 'click');
+					//google.maps.event.trigger(item, 'click');
+					item.setAnimation(google.maps.Animation.BOUNCE);
 				} 
 				else {
-					item.infowindow.close();	
+					//item.infowindow.close();	
+					item.setAnimation(null);
 				}
+			});
+		}).on("mouseleave",function(){
+			$.each(houseMarkers, function(index, item){
+				item.setAnimation(null);
 			});
 		});
 	};
@@ -264,8 +272,13 @@
 			
 			
 			var $a = $(temp.find("a")[0]);
-			$a.attr("href",ctx+"/news/property?obj="+obj.objectId+"&lat="+baseMarkers[0].position.lat()+"&lng="+baseMarkers[0].position.lng());
 			
+			$a.attr("href",ctx+"/news/property?obj="+obj.objectId
+					+"&lat="+baseMarkers[0].position.lat()
+					+"&lng="+baseMarkers[0].position.lng()
+					+"&search="+encodeURIComponent($("#search-location-text").val()));
+			
+			$a.attr("onclick","window.open(this.href); return false;");
 			var $price = $(temp.find(".price")[0]);
 			$price.text(obj.price)
 			
@@ -278,7 +291,6 @@
 			return temp;
 	}
 
-	
 	var cleanMap = function(){
 		$.each(baseMarkers, function(index,item){
 			item.setMap(null)
@@ -293,6 +305,7 @@
 		houseMarkers = [];
 		polygons = [];
 		currentNews = [];
+		$newsRow.html('');
 	};
 	
 	// This is the PLACE DETAILS search - it's the most detailed so it's only
