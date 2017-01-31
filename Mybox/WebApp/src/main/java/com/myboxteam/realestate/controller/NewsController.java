@@ -64,6 +64,8 @@ public class NewsController extends MBBaseController{
 		mav.addObject("baseLat",request.getParameter("lat"));
 		mav.addObject("baseLng",request.getParameter("lng"));
 
+		System.out.println("search = " + request.getParameter("search"));
+		mav.addObject("search", request.getParameter("search"));
 		mav.setViewName("news/property");
 		return mav;
 	}
