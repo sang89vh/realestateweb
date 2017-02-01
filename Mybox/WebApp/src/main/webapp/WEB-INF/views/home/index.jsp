@@ -34,6 +34,7 @@
     var searchBox;
     var $newsRow = $("#new-row");
     var currentNews = [];
+    var currentMarker;
     var oldBound;
 
     var initMap = function() {	
@@ -205,16 +206,21 @@
 	var autoClick = function(){
 		$("#new-row .item").on("mouseenter",function(){
 			var obj =$(this).data();
+			if (currentMarker != undefined){
+				currentMarker.setAnimation(null);
+				currentMarker.infowindow.close();
+			} 
 			$.each(houseMarkers, function(index, item){
 				if (item.id === obj.objectId){
 					//google.maps.event.trigger(item, 'click');
 					item.setAnimation(google.maps.Animation.BOUNCE);
+					//cleanPolygons();
+					//findDistrictForMarker(item);
+					currentMarker = item;
+					return false;
 				} 
-				else {
-					//item.infowindow.close();	
-					item.setAnimation(null);
-				}
 			});
+			
 		}).on("mouseleave",function(){
 			$.each(houseMarkers, function(index, item){
 				item.setAnimation(null);
@@ -248,12 +254,16 @@
 	        if (placeInfoWindow.marker == this) {
 	          console.log("This infowindow already is on this marker!");
 	        } else {
-	        	$.each(houseMarkers, function(index,item){
-	        		item.infowindow.close();
-	        	});
-	        	//placeInfoWindow.setContent(obj.objectId);
+	        	if (currentMarker != undefined){
+					currentMarker.setAnimation(null);
+					currentMarker.infowindow.close();
+				} 
+	        	
 	        	placeInfoWindow.setContent(showNews(obj).html());
+				//cleanPolygons();
+				//findDistrictForMarker(marker);
 	        	placeInfoWindow.open(map, marker);
+	        	currentMarker = marker;
 	            // Make sure the marker property is cleared if the infowindow is closed.
 	            placeInfoWindow.addListener('closeclick', function() {
 	            	placeInfoWindow.marker = null;
@@ -307,6 +317,13 @@
 		currentNews = [];
 		$newsRow.html('');
 	};
+	
+	var cleanPolygons = function(){
+		$.each(polygons, function(index,item){
+			item.setMap(null)
+		});
+		polygons = [];
+	}
 	
 	// This is the PLACE DETAILS search - it's the most detailed so it's only
     // executed when a marker is selected, indicating the user wants more
