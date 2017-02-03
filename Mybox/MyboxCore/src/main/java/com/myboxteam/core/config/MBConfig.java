@@ -13,5 +13,10 @@ public class MBConfig implements MBCommCode {
 		EXMAPLE_CONFIG = url;
 	}
 	
+	public static String PATH_IMAGE;
+	@Value("${path.image}")
+	public void setPathImage(String path) {
+		PATH_IMAGE = path;
+	}
 
 }
