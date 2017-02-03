@@ -347,3 +347,12 @@ ol.linenums {
   width: 140px;
   margin-left: 20px;
 }
+
+.map {
+	height: 500px;
+}
+@media only screen and (max-width: 500px) {
+    .map {
+    	height: 300px;
+    }
+}

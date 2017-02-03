@@ -9,7 +9,58 @@
   }
   </style>
 <script type="text/javascript">
-
+function initMap() {
+	map = new google.maps.Map(document.getElementById('map'), {
+     	zoom: 15
+     });
+	//var c = ${news};
+	var lat = ${latitude};
+	var lng = ${longitude};
+	var targetPos = {
+		lat: lat,
+	    lng: lng
+    };
+	map.setCenter(targetPos);
+	
+	var iconTargetPos = {
+			  url: ctx + "/resources/img/icons/map/selectedHousePos.ico", // url
+			  scaledSize: new google.maps.Size(40,40), // scaled size
+			  origin: new google.maps.Point(0,0), // origin
+			  anchor: new google.maps.Point(0, 0), // anchor
+			};
+	
+	var markerTargetPos = new google.maps.Marker({
+	 	map: map,
+        position: {lat: lat, lng:lng},
+        //title: obj.title,
+		icon: iconTargetPos,
+        //id: news.objectId,
+        //infowindow: placeInfoWindow,
+        //label: "Marker A"
+      });
+	
+	var baseLat = ${baseLat};
+	var baseLng = ${baseLng};
+	var markerBasePos = new google.maps.Marker({
+		map: map,
+        position: {lat: baseLat, lng: baseLng},
+	});
+	console.log(lat);
+}
+var searchLocations = function(){
+	var locationAutocomplete = new google.maps.places.Autocomplete(document.getElementById('search-location-text'));
+	var searchAddress =  document.getElementById('search-location-text');
+	var searchBox = new google.maps.places.SearchBox(searchAddress);
+	
+	searchBox.addListener('places_changed', function() {
+		var url = ctx + '?search=' + encodeURIComponent($("#search-location-text").val());
+		var link = document.createElement('a');
+		link.href = url;
+		document.body.appendChild(link);
+		link.click();
+	});
+	
+}
 var drawGrid = function(obj) {
 
 	$("#jsGrid")
@@ -72,6 +123,7 @@ var drawGrid = function(obj) {
 					});
 
 };
+/*
 $(document).ready(function(){
 	var prm ={
 		southwestLatitude : 21.027684827936138,
@@ -81,8 +133,13 @@ $(document).ready(function(){
 
 	};
 	drawGrid(prm);
-	
+
+
 })
+*/
+$(document).ready(function() {
+	searchLocations();
+});
 </script>
 <div class="row">
 	<div class="col-md-4">
@@ -183,7 +240,7 @@ $(document).ready(function(){
 	</div>
 	</div>
 </div>
-		
+<div>		
 	<div class="col-md-12">
 		<p>${news.content}</p>
 	</div>
@@ -205,8 +262,8 @@ $(document).ready(function(){
 				</table>
 			
 		</div>
-		<div class="col-md-6">
-			<iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d14896.52466399664!2d105.82315895!3d21.0274371!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1484299700561" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+		<div class="col-md-6 map">
+    		<div id="map" class="col-md-7" style="width:100%;height: 100%"></div>
 		</div>
 	</div>
 	<div class="col-md-12">
@@ -220,3 +277,6 @@ $(document).ready(function(){
 		</div>
 	</div>
 </div>
+	<script
+		src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyCcDHHuK_bGlftUhpq-MWo72JwD0-PYrv8&v=3&callback=initMap">
+	</script>
