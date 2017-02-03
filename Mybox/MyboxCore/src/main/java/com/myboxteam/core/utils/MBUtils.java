@@ -1,6 +1,7 @@
 package com.myboxteam.core.utils;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,9 +27,14 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.parse4j.ParseObject;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myboxteam.core.config.MBConfig;
+import com.myboxteam.core.exception.ErrorCodeEnumImpl;
+import com.myboxteam.core.exception.MBException;
 public class MBUtils {
 	private static PrettyTime prettyTime = new PrettyTime(new Locale("vi"));
 	
@@ -370,6 +376,33 @@ public class MBUtils {
 		}
 		return "";
 		
+	}
+	public static String generateFileName(String extension) {
+
+		Calendar cal = Calendar.getInstance();
+
+		return Long.toHexString(cal.getTimeInMillis()) + "." + extension;
+
+	}
+
+
+	public static void saveFile(String output, MultipartFile file) {
+		logger.info("do upload file");
+		String fullPathfile = MBConfig.PATH_IMAGE + File.separatorChar+output;
+		try {
+			BufferedOutputStream stream = new BufferedOutputStream(
+					new FileOutputStream(new File(fullPathfile)));
+			FileCopyUtils.copy(file.getInputStream(), stream);
+			stream.close();
+
+		} catch (Exception e) {
+
+			throw new MBException(ErrorCodeEnumImpl.UNKNOWN_ERROR);
+
+		}
+
+		logger.info("upload file end:" + fullPathfile);
+
 	}
 
 }
