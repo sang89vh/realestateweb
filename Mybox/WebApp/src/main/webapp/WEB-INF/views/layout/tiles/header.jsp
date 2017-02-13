@@ -54,4 +54,6 @@
 
 <script type="text/javascript" src="${ctx}/resources/js/dropzone.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/realestate.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/realestate-map.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/markerclusterer.js"></script>
 

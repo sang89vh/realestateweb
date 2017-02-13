@@ -61,6 +61,12 @@ var searchLocations = function(){
 	});
 	
 }
+
+$(document).ready(function() {
+	searchLocations();
+});
+</script>
+<script type="text/javascript">
 var drawGrid = function(obj) {
 
 	$("#jsGrid")
@@ -123,23 +129,7 @@ var drawGrid = function(obj) {
 					});
 
 };
-/*
-$(document).ready(function(){
-	var prm ={
-		southwestLatitude : 21.027684827936138,
-		southwestLongitude : 105.77814722164305,
-		northeastLatitude : 21.032691930005605,
-		northeastLongitude : 105.79145097835692
 
-	};
-	drawGrid(prm);
-
-
-})
-*/
-$(document).ready(function() {
-	searchLocations();
-});
 </script>
 <div class="row">
 	<div class="col-md-4">

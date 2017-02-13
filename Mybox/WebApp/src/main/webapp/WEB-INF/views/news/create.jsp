@@ -62,10 +62,6 @@
 						</div>
 						<div class="col-md-6">
 							<h6>Địa chỉ</h6>
-							Vị trí hiện tại của bạn
-							<div class="map">
-    							<div id="map" style="width:100%;height: 100%"></div>
-    						</div>
 							<label class="radio">
             					<input type="radio" name="positionOptions" id="posOption1" value="currentPos" data-toggle="radio" class="custom-radio">
             						<span class="icons">
@@ -74,7 +70,6 @@
             						</span>
            							Sử dụng địa điểm hiện tại
           					</label>
-          					
           					<label class="radio">
             					<input type="radio" name="positionOptions" id="posOption2" value="anotherPos" data-toggle="radio" class="custom-radio">
             						<span class="icons">
@@ -83,6 +78,9 @@
             						</span>
            							 Sử dụng địa điểm khác
           					</label>
+          					<div class="map">
+    							<div id="map" style="width:100%;height: 100%"></div>
+    						</div>
           					<div id="posDetail">
            						<label>Địa chỉ được chọn</label>
            						<p/>
@@ -110,36 +108,45 @@ function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
      	zoom: 15
      });
-	findCurrentPos();
+	var currentPos = findCurrentPos();
+	//var infowindow = new google.maps.InfoWindow;
+	//var geocoder = new google.maps.Geocoder;
+	//geocodeLatLng(geocoder,currentPos,infowindow);
+};
+
+function geocodeLatLng(geocoder, latlng) {
+	console.log(latlng);
+    geocoder.geocode({'location': latlng}, function(results, status) {
+      if (status === 'OK') {
+    	console.log('Result');
+    	console.log(results);
+        if (results[1]) {
+          map.setZoom(11);
+          var marker = new google.maps.Marker({
+            position: latlng,
+            map: map
+          });
+          //infowindow.setContent(results[1].formatted_address);
+          //infowindow.open(map, marker);
+        } else {
+          window.alert('No results found');
+        }
+      } else {
+        window.alert('Geocoder failed due to: ' + status);
+      }
+    });
+};
+    
+var cleanMap = function(){
 	
 }
 
-var findCurrentPos = function(){
-	//cleanMap();		
-	var markerCurrentPos = new google.maps.Marker({map: map, title: 'You are here'});
-	// Try HTML5 geolocation.
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var currentPos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        //infoWindow.setPosition(currentPos);
-        //infoWindow.setContent('Location found.');
-		markerCurrentPos.setPosition(currentPos);
-        map.setCenter(currentPos);
-        oldBound = map.getBounds();
-        baseMarkers.push(markerCurrentPos);
-        findDistrictForMarker(markerCurrentPos);
-        //console.log(currentPos);
-      }, function() {
-        handleLocationError(true, infoWindow, map.getCenter());
-      });
-    } else {
-      // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
-    }  
-};
+var processBasePosition = function(postion, map){
+	var marker = new google.maps.Marker({map: map});
+	marker.setPosition(postion);
+    map.setCenter(postion);
+}	
+
 </script>
 
 <script type="text/javascript">
