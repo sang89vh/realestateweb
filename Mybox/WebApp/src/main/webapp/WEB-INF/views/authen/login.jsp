@@ -16,28 +16,28 @@
 					<div class="msg" style="text-align: center;">${msg}</div>
 				</c:if>
 			</div>
-			<h5 class="form-signup-heading text-center">LOGIN TO F-SYSTEM</h5>
-			<label for="inputEmail" class="sr-only">Your email</label> 
-			<input type='text' 
+			<h5 class="form-signup-heading text-center">Đăng nhập Webtimnha.com</h5>
+			<label for="inputEmail" class="sr-only">Địa chỉ email</label> 
+			<input style="margin-top: 10px;" type='text' 
 				   name='USER_NAME' 
 				   id='USER_NAME' 
 				   class='form-control'
-				   placeholder="Enter your email" 
+				   placeholder="Địa chỉ email" 
 				   required 
 				   autofocus />
 				
-			<label for="inputPassword" class="sr-only">Your Password</label> 
-			<input type='PASSWORD' 
+			<label for="inputPassword" class="sr-only">Mật khẩu</label> 
+			<input style="margin-top: 10px;" type='PASSWORD' 
 				   name='PASSWORD'
 				   id="inputPassword"
-				   placeholder="Enter your password" 
+				   placeholder="Mật khẩu" 
 				   required 
 				   class="form-control"
 				   />
 			<input type="hidden" name="${_csrf.parameterName}"
 				value="${_csrf.token}" />
 			
-			<button id="btn-signup-submit" 	data-loading-text="Loading..." class="btn btn-lg btn-primary btn-block" type="submit" >Login</button>
+			<button id="btn-signup-submit" 	data-loading-text="Loading..." class="btn btn-lg btn-primary btn-block" type="submit" style="margin-top: 10px;">Đăng nhập</button>
 
 		</form>
 	</div>

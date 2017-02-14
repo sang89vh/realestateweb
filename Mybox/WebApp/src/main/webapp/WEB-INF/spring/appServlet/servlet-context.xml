@@ -23,6 +23,17 @@
 		up static resources in the ${webappRoot}/resources directory -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:/config/message/message-common</value>
+			</list>
+		</property>
+		<property name="cacheSeconds">
+			<value>60</value>
+		</property>
+	</bean>
+	
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
 		in the /WEB-INF/views directory -->
 	<bean

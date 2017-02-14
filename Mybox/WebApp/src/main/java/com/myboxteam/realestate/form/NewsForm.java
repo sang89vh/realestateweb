@@ -1,19 +1,71 @@
 package com.myboxteam.realestate.form;
 
-public class NewsForm {
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
+public class NewsForm  extends BaseForm{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8267993275478807478L;
+	@NotNull
+	@NotBlank
+	@NotEmpty
 	private String title;
+	private String imageIds;
+	
+	@NotNull
+	@NotBlank
+	@NotEmpty
 	private String newType;
+	
+	@NotNull
 	private Long acreage;
+	
+	@NotNull
 	private Long price;
+	
+	@NotNull
+	@NotBlank
+	@NotEmpty
 	private String priceUnit;
+	
+	@NotNull
+	@NotBlank
+	@NotEmpty
 	private String content;
+	
+	@NotNull
+	@NotBlank
+	@NotEmpty
 	private String address;
+	
+	@NotNull
+	@NotBlank
+	@NotEmpty
 	private String mobile;
+	
+	@NotNull
+	private Long longitude;
+	
+	@NotNull
+	private Long lagtidue;
+	
+	
 	public String getTitle() {
 		return title;
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public String getImageIds() {
+		return imageIds;
+	}
+	public void setImageIds(String imageIds) {
+		this.imageIds = imageIds;
 	}
 	public String getNewType() {
 		return newType;
@@ -56,6 +108,18 @@ public class NewsForm {
 	}
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+	public Long getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(Long longitude) {
+		this.longitude = longitude;
+	}
+	public Long getLagtidue() {
+		return lagtidue;
+	}
+	public void setLagtidue(Long lagtidue) {
+		this.lagtidue = lagtidue;
 	}
 
 }

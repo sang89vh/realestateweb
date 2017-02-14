@@ -172,3 +172,94 @@ var addListenerIdleToMap = function(map){
 
 
 
+var submitForm = function(btn){
+	console.log(btn);
+	
+	var form = $(btn).parents('form');
+	var action = form.attr("data-action")
+	var callback = form.attr("data-callback")
+	eval(action+"(form,callback)");
+}
+
+var showSaveErrorNotification = function(){
+	sweetAlert("Oops...", "Something went wrong!", "error");
+}
+var showSaveSuccessNotification = function(){
+	swal("Good job!", "You clicked the button!", "success");
+}
+function hiddeFormError(formId) {
+
+	var allMessError = $('form#' + formId + ' .message_error');
+	$(allMessError).each(function() {
+
+		$(this).text('');
+
+	});
+
+	$('form#' + formId + ' .input_error').each(function() {
+
+		$(this).removeClass('input_error');
+
+	});
+
+}
+function showFormError(restError, formId) {
+
+	hiddeFormError(formId);
+	var fieldErrors = restError.fieldErrors;
+
+	$.each(fieldErrors, function(index, value) {
+
+		$('form#' + formId + ' #' + value.fieldId).addClass('input_error');
+		$field = $('form#' + formId + ' #error\\.' + value.fieldId);
+
+		$field.text(value.errorMessage);
+	});
+}
+var saveForm = function($myForm,callback){
+		console.log("saveForm go");
+		
+		
+		// Find disabled inputs, and remove the "disabled" attribute
+		var disabled = $myForm.find(':input:disabled').removeAttr('disabled');
+		$("#imageIds").val(paths.toString());
+		var formData = $myForm.serialize();
+		
+		// re-disabled the set of inputs that you previously enabled
+		disabled.attr('disabled','disabled');
+		var myFormId = $myForm.attr("id");
+		var action = $myForm.attr("action");
+		
+		$.ajax({ 
+			url: action , 
+			type: 'post', 
+			data: formData,
+			cache:false,
+			suppressErrors:false,
+			formId:myFormId,
+			success: function(data, textStatus, jqXHR) {
+				
+					console.log("saveFormAjax success");
+					//hidde all error
+					hiddeFormError(myFormId);
+					
+					//call action callback with current form
+					if(callback){
+						eval(callback+'($myForm, data)');
+					}else{
+						showSaveSuccessNotification();
+					}
+					
+									
+				
+			},complete: function(){
+				console.log("saveFormAjax complete");
+				return true;
+				
+			},error : function(request, status, error,event){
+				console.log("saveFormAjax error");
+				showSaveErrorNotification();
+				return false;
+			}
+		});
+}
