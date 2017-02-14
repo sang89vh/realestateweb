@@ -28,10 +28,8 @@
     
     <script>
 	 
-    var houseMarkers = [];
-    var baseMarkers = [];
+    var targetMarkers = [];
     var polygons = [];
-    var searchBox;
     var $newsRow = $("#new-row");
     var currentNews = [];
     var currentMarker;
@@ -43,123 +41,37 @@
 	     });
 	        //var infoWindow = new google.maps.InfoWindow({map: map});
 	     //searchBox.setBounds(map.getBounds());
-	    prepareSearchLocation();
+	    var searchBox = prepareSearchLocation(map,document.getElementById('search-location-text'));
 	    if ($("#search-location-text").val() === ''){
-	    	findCurrentPos();
+	    	findCurrentPos(map,polygons,2);
 	    } else {
-	    	service = new google.maps.places.PlacesService(map);
-	    	request = {
-	    			query: $("#search-location-text").val()
-	              };
-	    	 service.textSearch(request, function(places) {
-	             //set the places-property of the SearchBox
-	             //places_changed will be triggered automatically
-	             searchBox.set('places', places || [])
-	           });
-	    }
-	    
+	    	seachPosAtStart(map,$("#search-location-text").val(),searchBox);
+	    }	    
 	    addListenerIdleToMap(map);   	
-	   	
+	};
+	
+	var addListenerIdleToMap = function(map){
+		map.addListener('idle', function() {
+		   	 if (map.getBounds() != null){
+		   		var bound = {
+		   				southwestLatitude: map.getBounds().f.f,
+		   				southwestLongitude: map.getBounds().b.b,
+		   				northeastLatitude: map.getBounds().f.b,
+		   				northeastLongitude: map.getBounds().b.f,
+		   			}
+		   		//console.log(map.getBounds());
+		   		loadTargetsInBound(map,bound,true);
+		   	 }		   		
+		     });
 	};
 	
 	/*
 	 $( "#search-location" ).click(function() {	 
 		 searchLocations();
 	 });
-	*/
-	
-	 var findCurrentPos = function(){
-			cleanMap();		
-			var markerCurrentPos = new google.maps.Marker({map: map, title: 'You are here'});
-			// Try HTML5 geolocation.
-		    if (navigator.geolocation) {
-		      navigator.geolocation.getCurrentPosition(function(position) {
-		        var currentPos = {
-		          lat: position.coords.latitude,
-		          lng: position.coords.longitude
-		        };
-		        //infoWindow.setPosition(currentPos);
-		        //infoWindow.setContent('Location found.');
-				markerCurrentPos.setPosition(currentPos);
-		        map.setCenter(currentPos);
-		        oldBound = map.getBounds();
-		        baseMarkers.push(markerCurrentPos);
-		        findDistrictForMarker(markerCurrentPos);
-		        //console.log(currentPos);
-		      }, function() {
-		        handleLocationError(true, infoWindow, map.getCenter());
-		      });
-		    } else {
-		      // Browser doesn't support Geolocation
-		    handleLocationError(false, infoWindow, map.getCenter());
-		    }  
-		};
-	 
-	 var prepareSearchLocation = function(){
-			console.log('search locations');
-			 var locationAutocomplete = new google.maps.places.Autocomplete(document.getElementById('search-location-text'));
-			 var searchAddress =  document.getElementById('search-location-text');
-			 searchBox = new google.maps.places.SearchBox(searchAddress);
-			 //var searchBox = new google.maps.places.Autocomplete(searchAddress);
-		    
-		 	// Bias the SearchBox results towards current map's viewport.
-		    map.addListener('bounds_changed', function() {
-		    	searchBox.setBounds(map.getBounds());
-		    });
-		 
-		       // Listen for the event fired when the user selects a prediction and retrieve
-		       // more details for that place.
-		      
-		    searchBox.addListener('places_changed', function() {
-		  
-		   		console.log('place changed');
-		      	cleanMap();
-		      	var places = searchBox.getPlaces();
-		      	console.log('Place');
-		      	console.log(places);
-		            if (places.length == 0) {
-		              return;
-		            }
-		            
-		            // For each place, get the icon, name and location.
-		            var bounds = new google.maps.LatLngBounds();
-		            places.forEach(function(place) {
-		          	  if (!place.geometry) {
-		                    console.log("Returned place contains no geometry");
-		                    return;
-		                  }
-		          	    var searchMarker = new google.maps.Marker({
-		                    map: map,
-		                    //icon: icon,
-		                    title: place.name,
-		                    position: place.geometry.location,
-		                    id: place.place_id
-		                  });
-		          	    var placeInfoWindow = new google.maps.InfoWindow();
-		          	    searchMarker.addListener('click', function() {
-		                 if (placeInfoWindow.marker == this) {
-		                   console.log("This infowindow already is on this marker!");
-		                 } else {
-		                	 getGGPlacesDetails(this, placeInfoWindow);
-		                 }
-		          	  });
-		          	  baseMarkers.push(searchMarker);
-		          	  findDistrictForMarker(baseMarkers[0]);
-		          	  if (place.geometry.viewport) {
-		                    // Only geocodes have viewport.
-		                    bounds.union(place.geometry.viewport);
-		                  } else {
-		                    bounds.extend(place.geometry.location);
-		                  }
-		            })
-		            map.fitBounds(bounds);
-		            oldBound = map.getBounds();
-			 })
-			 
-		};
+	*/		
 		
-		
-	var loadRentHouses = function(obj){
+	var loadTargetsInBound = function(map,bound,isClustered){
 		var iconHousePos = {
 				  url: ctx + "/resources/img/icons/map/housePos.ico", // url
 				  scaledSize: new google.maps.Size(40,40), // scaled size
@@ -171,7 +83,7 @@
 		$.ajax({ 
 			url: ctx + '/map/search-place?skip=50' , 
 			//type: 'post', 
-			data: obj,
+			data: bound,
 			cache:false,
 			suppressErrors:false,
 			success: function(data, textStatus, jqXHR) {
@@ -187,13 +99,17 @@
 					})
 					if (!foundNews){
 						$newsRow.append(showNews(item));
-						attachInfo(item);
+						attachMarkerToObject(item);
 						currentNews.push(item);
 					}
 					
 				});
-				console.log(currentNews.length);
-				autoClick();
+				//console.log(currentNews.length);
+				
+				if (isClustered){
+					clusterMarkers(map,targetMarkers);
+				}
+				autoClickCoMarker(map,isClustered);
 			},complete: function(){
 				return true;		
 			},error : function(request, status, error,event){
@@ -203,16 +119,24 @@
 		});
 	}
 	
-	var autoClick = function(){
+	var autoClickCoMarker = function(map,isClustered){
 		$("#new-row .item").on("mouseenter",function(){
 			var obj =$(this).data();
 			if (currentMarker != undefined){
 				currentMarker.setAnimation(null);
 				currentMarker.infowindow.close();
+				if (isClustered){
+					currentMarker.setMap(null);
+					//add 1 to ClusterIcon if want more exact result
+				}		
 			} 
-			$.each(houseMarkers, function(index, item){
+			$.each(targetMarkers, function(index, item){
 				if (item.id === obj.objectId){
 					//google.maps.event.trigger(item, 'click');
+					if (isClustered){
+						item.setMap(map);
+						//reduce 1 from ClusterIcon if want more exact result
+					}
 					item.setAnimation(google.maps.Animation.BOUNCE);
 					//cleanPolygons();
 					//findDistrictForMarker(item);
@@ -222,13 +146,17 @@
 			});
 			
 		}).on("mouseleave",function(){
-			$.each(houseMarkers, function(index, item){
+			$.each(targetMarkers, function(index, item){
 				item.setAnimation(null);
+				if (isClustered){
+					item.setMap(null);
+					//add 1 to ClusterIcon if want more exact result
+				}		
 			});
 		});
 	};
 	
-	var attachInfo = function(obj){
+	var attachMarkerToObject = function(obj){
 		var iconHousePos = {
 				  url: ctx + "/resources/img/icons/map/housePos.ico", // url
 				  scaledSize: new google.maps.Size(40,40), // scaled size
@@ -236,6 +164,7 @@
 				  anchor: new google.maps.Point(0, 0), // anchor
 				};
 		var placeInfoWindow = new google.maps.InfoWindow();
+		placeInfoWindow.setContent(showNews(obj).html());
 		var marker = new google.maps.Marker({
 		 	map: map,
             position: {lat:obj.location.latitude, lng:obj.location.longitude},
@@ -243,9 +172,10 @@
 			icon: iconHousePos,
             id: obj.objectId,
             infowindow: placeInfoWindow,
-            //label: "Marker A"
+            label: obj.price
           });
-		houseMarkers.push(marker);
+		
+		targetMarkers.push(marker);
 	
 		// Create a single infowindow to be used with the place details information
     	// so that only one is open at once.
@@ -259,7 +189,7 @@
 					currentMarker.infowindow.close();
 				} 
 	        	
-	        	placeInfoWindow.setContent(showNews(obj).html());
+	        	
 				//cleanPolygons();
 				//findDistrictForMarker(marker);
 	        	placeInfoWindow.open(map, marker);
@@ -282,10 +212,9 @@
 			
 			
 			var $a = $(temp.find("a")[0]);
-			
 			$a.attr("href",ctx+"/news/property?obj="+obj.objectId
-					+"&lat="+baseMarkers[0].position.lat()
-					+"&lng="+baseMarkers[0].position.lng()
+					+"&lat="+baseMarker.position.lat()
+					+"&lng="+baseMarker.position.lng()
 					+"&search="+encodeURIComponent($("#search-location-text").val()));
 			
 			$a.attr("onclick","window.open(this.href); return false;");
@@ -302,21 +231,18 @@
 	}
 
 	var cleanMap = function(){
-		$.each(baseMarkers, function(index,item){
-			item.setMap(null)
-		});
-		$.each(houseMarkers, function(index,item){
-			item.setMap(null)
-		});
-		$.each(polygons, function(index,item){
-			item.setMap(null)
-		});
-		baseMarkers = [];
-		houseMarkers = [];
-		polygons = [];
+		cleanTargetMarkers();
+		cleanPolygons();
 		currentNews = [];
 		$newsRow.html('');
 	};
+	
+	var cleanTargetMarkers = function(){
+		$.each(targetMarkers, function(index,item){
+			item.setMap(null)
+		});
+		targetMarkers = [];
+	}
 	
 	var cleanPolygons = function(){
 		$.each(polygons, function(index,item){
@@ -325,52 +251,6 @@
 		polygons = [];
 	}
 	
-	// This is the PLACE DETAILS search - it's the most detailed so it's only
-    // executed when a marker is selected, indicating the user wants more
-    // details about that place.
-    var getGGPlacesDetails = function(marker, infowindow) {
-      var service = new google.maps.places.PlacesService(map);
-      service.getDetails({
-        placeId: marker.id
-      }, function(place, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-        	console.log('status OK');
-          // Set the marker property on this infowindow so it isn't created again.
-          infowindow.marker = marker;
-          var innerHTML = '<div>';
-          if (place.name) {
-            innerHTML += '<strong>' + place.name + '</strong>';
-          }
-          if (place.formatted_address) {
-            innerHTML += '<br>' + place.formatted_address;
-          }
-          if (place.formatted_phone_number) {
-            innerHTML += '<br>' + place.formatted_phone_number;
-          }
-          if (place.opening_hours) {
-            innerHTML += '<br><br><strong>Hours:</strong><br>' +
-                place.opening_hours.weekday_text[0] + '<br>' +
-                place.opening_hours.weekday_text[1] + '<br>' +
-                place.opening_hours.weekday_text[2] + '<br>' +
-                place.opening_hours.weekday_text[3] + '<br>' +
-                place.opening_hours.weekday_text[4] + '<br>' +
-                place.opening_hours.weekday_text[5] + '<br>' +
-                place.opening_hours.weekday_text[6];
-          }
-          if (place.photos) {
-            innerHTML += '<br><br><img src="' + place.photos[0].getUrl(
-                {maxHeight: 100, maxWidth: 200}) + '">';
-          }
-          innerHTML += '</div>';
-          infowindow.setContent(innerHTML);
-          infowindow.open(map, marker);
-          // Make sure the marker property is cleared if the infowindow is closed.
-          infowindow.addListener('closeclick', function() {
-            infowindow.marker = null;
-          });
-        }
-      });
-    }
     </script>
 
 	<script
