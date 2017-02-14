@@ -48,9 +48,18 @@ public class ParseUser extends ParseObject {
 
 	public void setPassword(String password) {
 		this.password = password;
+		put("password", password);
+		put("pass", password);
 		isDirty = true;
 	}
-
+	public String getPassword() {
+		return getString("password");
+	}
+	
+	public String getPass() {
+		return getString("pass");
+	}
+	
 	public void setEmail(String email) {
 		put("email", email);
 	}

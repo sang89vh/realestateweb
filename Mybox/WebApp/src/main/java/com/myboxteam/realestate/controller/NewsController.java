@@ -32,8 +32,8 @@ import com.myboxteam.realestate.form.NewsForm;
 @Controller
 @SessionAttributes("news")
 @RequestMapping("/news")
-public class NewsController extends MBBaseController{
-	
+public class NewsController extends MBBaseController {
+
 	@RequestMapping("/{category}")
 	public ModelAndView gird(ModelAndView mav, HttpServletRequest request,
 			HttpServletResponse response,
@@ -42,6 +42,7 @@ public class NewsController extends MBBaseController{
 		mav.setViewName("news/grid");
 		return mav;
 	}
+
 	@RequestMapping("/property")
 	public ModelAndView property(ModelAndView mav, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -56,14 +57,16 @@ public class NewsController extends MBBaseController{
 		if(data !=null && !StringUtils.isEmpty(formDate)){
 			String fdstr =MBUtils.convertDateToPrettyTime(formDate);
 			data.put("fromDateLabel",fdstr);
+
 		}
-		
-		mav.addObject("news",data);
-		
-		//search near by
+
+		mav.addObject("news", data);
+
+		// search near by
 		ParseGeoPoint lo = news.getParseGeoPoint("location");
-		
+
 		JSONArray placeNearHere = MapUtils.searchPlaceNear(lo);
+
 		mav.addObject("placeNearHere",placeNearHere);
 		
 		mav.addObject("latitude",lo.getLatitude());
@@ -74,41 +77,11 @@ public class NewsController extends MBBaseController{
 
 		System.out.println("search = " + request.getParameter("search"));
 		mav.addObject("search", request.getParameter("search"));
+
 		mav.setViewName("news/property");
 		return mav;
 	}
-	
-	@RequestMapping("/dang-tin")
-	public ModelAndView create(ModelAndView mav, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		
-		mav.setViewName("news/create");
-		return mav;
-	}
-	
-	@RequestMapping(value="/dang-tin",method=RequestMethod.POST)
-	public @ResponseBody NewsForm save(@ModelAttribute("news") NewsForm news) throws Exception {
-		
-		return news;
-	}
-	
-	@RequestMapping(value = "/uploadImages")
-	public @ResponseBody Map<String,Object> upload(
-			@RequestParam(value = "file", required = true) MultipartFile file) throws ParseException {
-		String name = file.getOriginalFilename();
-		String ext = FilenameUtils.getExtension(name);
-		// generate output file
-		String output = MBUtils.generateFileName(ext);
 
-		// save file to storage
-		MBUtils.saveFile(output, file);
-		
-		ParseObject image = new ParseObject("ReImages");
-		image.put("path", output);
-		image.save();
-		
-		return image.getData();
-	}
 	
-	
+
 }

@@ -23,7 +23,7 @@
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Tài khoản<b class="caret"></b></a> 
 					<span class="dropdown-arrow"></span>
 				<ul class="dropdown-menu">
-					<li><a href="<c:url value='/mb0001/logout' />">Đăng nhập</a></li>
+					<li><a href="<c:url value='/xac-thuc/dang-xuat' />">Đăng xuất</a></li>
 				</ul></li>
 		</ul>
 	</div>

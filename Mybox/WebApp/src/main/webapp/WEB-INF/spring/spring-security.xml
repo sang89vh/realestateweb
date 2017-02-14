@@ -8,32 +8,36 @@
 	<http security="none" pattern="/resources/**"/>
     <!-- enable use-expressions -->
 	<http auto-config="true">
-		<intercept-url pattern="/member/**" access="hasRole('ROLE_MEMBER')"/>
-		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
-		<intercept-url pattern="/**" access="hasRole('permitAll')"/>
+		<intercept-url pattern="/xac-thuc/**" access="permitAll"/>
+		<intercept-url pattern="/thanh-vien/**" access="hasRole('MEMBER')"/>
+		<intercept-url pattern="/quan-tri/**" access="hasRole('ADMIN')"/>
+		<intercept-url pattern="/**" access="permitAll"/>
+		
 		<!-- access denied page -->
-		<access-denied-handler error-page="/mb0001/403" />
+		<access-denied-handler error-page="/xac-thuc/403" />
 		<!-- if user doesn't logged -->
 		<form-login 
-		    login-page="/mb0001/login" 
-		    default-target-url="/mb0002/index" 
-			authentication-failure-url="/mb0001/login?error" 
+		    login-page="/xac-thuc/dang-nhap" 
+		    default-target-url="/" 
+			authentication-failure-url="/xac-thuc/dang-nhap?error" 
 			username-parameter="USER_NAME"
 			password-parameter="PASSWORD" />
-		<logout logout-success-url="/mb0001/login?logout"  />
+		<logout logout-success-url="/xac-thuc/dang-nhap?logout"  />
 		<!-- enable csrf protection -->
 		<csrf/>
 	</http>
 	<global-method-security pre-post-annotations="enabled" />
 	<!-- Select users and user_roles from database -->
 	<authentication-manager>
-		<authentication-provider>
-			<jdbc-user-service data-source-ref="dataSource"
-				users-by-username-query=
-					"select USER_NAME,PASSWORD, ENABLED from SYS_USER where USER_NAME =?"
-				authorities-by-username-query=
-					"select USER_NAME, ROLE from SYS_USER_ROLE where USER_NAME =?  " />
-		</authentication-provider>
+		 <authentication-provider user-service-ref="secUserDetailsService">
+	     </authentication-provider>
+<!-- 		<authentication-provider> -->
+<!-- 			<jdbc-user-service data-source-ref="dataSource" -->
+<!-- 				users-by-username-query= -->
+<!-- 					"select USER_NAME,PASSWORD, ENABLED from SYS_USER where USER_NAME =?" -->
+<!-- 				authorities-by-username-query= -->
+<!-- 					"select USER_NAME, ROLE from SYS_USER_ROLE where USER_NAME =?  " /> -->
+<!-- 		</authentication-provider> -->
 	</authentication-manager>
 	
 </beans:beans>

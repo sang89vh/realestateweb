@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/layout/taglib.jsp"%>
 <style type="text/css">
 #form-create input,select,textarea {
@@ -9,48 +8,61 @@
 </style>
 <div class="row">
 	<div class="col-md-12" id="form-create"  style="margin-top: 10px">
-				<form action="${ctx}/news/create" method="post" data-action="saveForm" data-callback="saveNewsCallback">
+				<form  id="form-create-news" action="${ctx}/news/dang-tin" method="post" data-action="saveForm" data-callback="saveNewsCallback">
 					<div class="col-md-12" style="background-color: #474e52; color: white;margin-bottom: 10px;">
 						<h6>Thông tin nhà đất</h6>
 					</div>
 					
 					<div class="row" style="margin-top: 10px">
 						<div class="col-md-9">
-							<input name="title" class="form-control" placeholder="Tiêu đề tin" type="text" min="5" maxlength="400" autocomplete="on" autofocus="autofocus" required="required"> 
+							<span id="error.title" class="message_error"></span>
+							<input id="title" name="title" class="form-control" placeholder="Tiêu đề tin" type="text" min="5" maxlength="400" autocomplete="on" autofocus="autofocus" required="required"> 
 						</div>
 						<div class="col-md-3">
-							<select name ="typeNews"  class="selectpicker" style="width: 100%">
-							  <option>Phân loại</option>
-							  <option>Bán căn hộ chung chư</option>
-							  <option>Bán nhà riêng</option>
-							  <option>Bán nhà biệt thự liền kề</option>
-							  <option>Bán nhà mặt phố</option>
-							  <option>Bán đất nền dự án</option>
-							  <option>Bán đất</option>
-							  <option>Bán trang trại, khu nghỉ dưỡng</option>
-							  <option>Bán kho, nhà xưởng</option>
+							<span id="error.newType" class="message_error"></span>
+							<select id="newType" name ="newType"  class="selectpicker" style="width: 100%">
+							  <option value="">Phân loại</option>
+							  <option value="SELL_APARTMENT">Bán căn hộ chung chư</option>
+							  <option value="SELL_HOUSE">Bán nhà riêng</option>
+							  <option value="SELL_HOUSE_ADJACENT">Bán nhà biệt thự liền kề</option>
+							  <option value="SELL_HOUSE_FRONT_ROAD">Bán nhà mặt phố</option>
+							  <option value="SELL_LAND_PROECT">Bán đất nền dự án</option>
+							  <option value="SELL_LAND">Bán đất</option>
+							  <option value="SELL_FARM">Bán trang trại, khu nghỉ dưỡng</option>
+							  <option value="SELL_STORE_HOUSE">Bán kho, nhà xưởng</option>
 							</select>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-6">
-							<input name="acreage" type="number" min="0" required="required" class="form-control" placeholder="Điện tích(m²)">
+							<span id="error.acreage" class="message_error"></span>
+							<input id="acreage" name="acreage" type="number" min="0" required="required" class="form-control" placeholder="Điện tích(m²)">
 						</div>
 						<div class="col-md-3">
-							<input name="price" type="number" min="0" required="required" class="form-control" placeholder="Giá">
+							<span id="error.price" class="message_error"></span>
+							<input id="price" name="price" type="number" min="0" required="required" class="form-control" placeholder="Giá">
 						</div>
 						<div class="col-md-3">
-							<select name="priceUnit"  class="selectpicker" required="required">
-							  <option>Đơn vị</option>
-							  <option>Triệu</option>
+							<span id="error.priceUnit" class="message_error"></span>
+							<select id="priceUnit" name="priceUnit"  class="selectpicker" required="required">
+							  <option value="">Đơn vị</option>
+							  <option value="MILLION_PER_MONTH">Triệu/Tháng</option>
+							  <option value="MILLION_PER_SQUARE_METER">Triệu/M2</option>
+							  <option value="HUNDERD_PER_MONTH">Trăm nghìn đồng/Tháng</option>
+							  <option value="HUNDERD_PER_SQUARE_METER">Trăm nghìn đồng/Tháng</option>
 							</select>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-6">
-							<textarea name="content"  required="required"  class="form-control" rows="9"></textarea>
-							<input name="mobile" type="number" required="required"  class="form-control" placeholder="Điện thoại liên hệ">
+							<span id="error.content" class="message_error"></span>
+							<textarea id="content" name="content"  required="required"  class="form-control" rows="9"></textarea>
+							
+							<span id="error.mobile" class="message_error"></span>
+							<input id="mobile" name="mobile" type="number" required="required"  class="form-control" placeholder="Điện thoại liên hệ">
 							<div class="images">
+								<span id="error.imageIds" class="message_error"></span>
+								<input id="imageIds" name="imageIds" type="text" hidden="true" >
 								<h6>Hình ảnh nhà đất</h6>
 							</div>
 							<div class="drop-images" style="margin-top: 10px" id="my-dropzone">
@@ -61,6 +73,12 @@
 							</div>
 						</div>
 						<div class="col-md-6">
+
+							<span id="error.address" class="message_error"></span>
+							<input ID="address" name="address" required="required" class="form-control" placeholder="Địa chỉ" style="margin-top: 10px">
+							<input name="lagtitude" type="number" hidden="true" value="105.7839107">
+							<input name="longitude" type="number" hidden="true" value="21.0309421">
+
 							<h6>Địa chỉ</h6>
 							<label class="radio">
             					<input type="radio" name="positionOptions" id="posOption1" value="currentPos" data-toggle="radio" class="custom-radio">
@@ -90,6 +108,7 @@
            					</div>
 							<!-- <input name="address" required="required" class="form-control" placeholder="Địa chỉ" style="margin-top: 10px">  -->
 							<!-- 
+
 							<div class="col-md-12">
 								<iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d14896.52466399664!2d105.82315895!3d21.0274371!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1484299700561" width="600" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
 							</div>
@@ -147,9 +166,6 @@ var processBasePosition = function(postion, map){
     map.setCenter(postion);
 }	
 
-</script>
-
-<script type="text/javascript">
 var paths = [];
 //Disabling autoDiscover, otherwise Dropzone will try to attach twice.
 Dropzone.autoDiscover = false;
@@ -187,38 +203,11 @@ $(function() {
   $("#my-dropzone").addClass("dropzone");
 })
 
-var submitForm = function(btn){
-	form = $(btn).parents('form');
-	var action = form.attr("data-action")
-	var callback = form.attr("data-callback")
-	eval(action+"("+form+","+callback+")");
-}
 var saveNewsCallback = function(form,data){
 	console.log(data);
-	
+	window.location.href=ctx+'/thanh-vien/quan-ly-tin';
 }
-var showSaveErrorNotification = function(){
-	sweetAlert("Oops...", "Something went wrong!", "error");
-}
-var showSaveSuccessNotification = function(){
-	swal("Good job!", "You clicked the button!", "success");
-}
-function hiddeFormError(formId) {
 
-	var allMessError = $('form#' + formId + ' .message_error');
-	$(allMessError).each(function() {
-
-		$(this).text('');
-
-	});
-
-	$('form#' + formId + ' .input_error').each(function() {
-
-		$(this).removeClass('input_error');
-
-	});
-
-}
 function showFormError(restError, formId) {
 
 	hiddeFormError(formId);
@@ -303,3 +292,4 @@ $(document).ready(function(){
 	<script
 		src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyCcDHHuK_bGlftUhpq-MWo72JwD0-PYrv8&v=3&callback=initMap">
 	</script>
+
