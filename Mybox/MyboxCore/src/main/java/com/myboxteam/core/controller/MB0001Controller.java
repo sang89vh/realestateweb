@@ -27,13 +27,13 @@ import com.myboxteam.database.model.UserModel;
 
 @Controller
 @SessionAttributes("authen")
-@RequestMapping("/xac-thuc")
+@RequestMapping("/authen")
 public class MB0001Controller extends MBBaseController {
 
 	private static final Logger logger = LogManager
 			.getLogger(MB0001Controller.class);
 
-	@RequestMapping(value = "/dang-nhap", method = RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login(ModelAndView mav,
 			@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout
@@ -75,7 +75,7 @@ public class MB0001Controller extends MBBaseController {
 
 	}
 
-	@RequestMapping(value = "/dang-xuat", method = RequestMethod.GET)
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request,
 			HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext()
@@ -83,10 +83,10 @@ public class MB0001Controller extends MBBaseController {
 		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
-		return "redirect:/xac-thuc/dang-nhap?logout";
+		return "redirect:/authen/login?logout";
 	}
 
-	@RequestMapping(value = "/dang-ky", method = RequestMethod.GET)
+	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public ModelAndView signup(ModelAndView mav) {
 
 		mav.setViewName("authen/signup");
@@ -94,7 +94,7 @@ public class MB0001Controller extends MBBaseController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/dang-ky", method = RequestMethod.POST)
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public @ResponseBody Map saveUser(@ModelAttribute("userModel") UserModel userModel) throws ParseException {
 
 		ParseUser user = new ParseUser();

@@ -8,21 +8,21 @@
 	<http security="none" pattern="/resources/**"/>
     <!-- enable use-expressions -->
 	<http auto-config="true">
-		<intercept-url pattern="/xac-thuc/**" access="permitAll"/>
-		<intercept-url pattern="/thanh-vien/**" access="hasRole('MEMBER')"/>
-		<intercept-url pattern="/quan-tri/**" access="hasRole('ADMIN')"/>
+		<intercept-url pattern="/authen/**" access="permitAll"/>
+		<intercept-url pattern="/member/**" access="hasRole('MEMBER')"/>
+		<intercept-url pattern="/admin/**" access="hasRole('ADMIN')"/>
 		<intercept-url pattern="/**" access="permitAll"/>
 		
 		<!-- access denied page -->
-		<access-denied-handler error-page="/xac-thuc/403" />
+		<access-denied-handler error-page="/authen/403" />
 		<!-- if user doesn't logged -->
 		<form-login 
-		    login-page="/xac-thuc/dang-nhap" 
+		    login-page="/authen/login" 
 		    default-target-url="/" 
-			authentication-failure-url="/xac-thuc/dang-nhap?error" 
+			authentication-failure-url="/authen/login?error" 
 			username-parameter="USER_NAME"
 			password-parameter="PASSWORD" />
-		<logout logout-success-url="/xac-thuc/dang-nhap?logout"  />
+		<logout logout-success-url="/authen/login?logout"  />
 		<!-- enable csrf protection -->
 		<csrf/>
 	</http>
@@ -31,13 +31,13 @@
 	<authentication-manager>
 		 <authentication-provider user-service-ref="secUserDetailsService">
 	     </authentication-provider>
-<!-- 		<authentication-provider> -->
+<!-- 		<tication-provider> -->
 <!-- 			<jdbc-user-service data-source-ref="dataSource" -->
 <!-- 				users-by-username-query= -->
 <!-- 					"select USER_NAME,PASSWORD, ENABLED from SYS_USER where USER_NAME =?" -->
 <!-- 				authorities-by-username-query= -->
 <!-- 					"select USER_NAME, ROLE from SYS_USER_ROLE where USER_NAME =?  " /> -->
-<!-- 		</authentication-provider> -->
+<!-- 		</tication-provider> -->
 	</authentication-manager>
 	
 </beans:beans>
