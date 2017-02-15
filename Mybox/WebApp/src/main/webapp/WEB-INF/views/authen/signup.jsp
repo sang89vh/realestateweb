@@ -4,10 +4,8 @@
 
 	<div class="div-login-container">
 
-		
-
 		<form name='loginForm' id="form-signup" class="form-signup"
-			action="<c:url value='/xac-thuc/dang-ky' />" method='POST'>
+			action="<c:url value='/authen/signup' />" method='POST'>
 			<label for="inputEmail" class="sr-only">Địa chỉ email</label> 
 			<input style="margin-top: 10px;" type='text' 
 				   name='username' 

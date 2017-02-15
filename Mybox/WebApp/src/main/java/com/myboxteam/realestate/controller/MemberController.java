@@ -24,17 +24,17 @@ import com.myboxteam.realestate.form.NewsForm;
 
 @Controller
 @SessionAttributes("member")
-@RequestMapping("/thanh-vien")
+@RequestMapping("/member")
 public class MemberController {
 
-	@RequestMapping(value = "/quan-ly-tin", method = RequestMethod.GET)
+	@RequestMapping(value = "/management", method = RequestMethod.GET)
 	public ModelAndView save(ModelAndView mav, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		mav.setViewName("member/mamage-news");
 		return mav;
 	}
 
-	@RequestMapping(value = "/dang-tin", method = RequestMethod.GET)
+	@RequestMapping(value = "/create-news", method = RequestMethod.GET)
 	public ModelAndView create(ModelAndView mav, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -42,7 +42,7 @@ public class MemberController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/dang-tin", method = RequestMethod.POST)
+	@RequestMapping(value = "/create-news", method = RequestMethod.POST)
 	public @ResponseBody Map save(@ModelAttribute("newsForm") NewsForm newsForm)
 			throws Exception {
 

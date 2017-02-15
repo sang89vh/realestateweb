@@ -8,7 +8,7 @@
 </style>
 <div class="row">
 	<div class="col-md-12" id="form-create"  style="margin-top: 10px">
-				<form  id="form-create-news" action="${ctx}/news/dang-tin" method="post" data-action="saveForm" data-callback="saveNewsCallback">
+				<form  id="form-create-news" action="${ctx}/news/create-news" method="post" data-action="saveForm" data-callback="saveNewsCallback">
 					<div class="col-md-12" style="background-color: #474e52; color: white;margin-bottom: 10px;">
 						<h6>Thông tin nhà đất</h6>
 					</div>
