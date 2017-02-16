@@ -73,32 +73,21 @@
 							<input name="latitude" type="number" hidden="true" value="21.0309421">
 							<input name="longitude" type="number" hidden="true" value="105.7839107">
 
+
 							<h6>Địa chỉ</h6>
-							<label class="radio">
-            					<input type="radio" name="positionOptions" id="posOption1" value="currentPos" data-toggle="radio" class="custom-radio">
-            						<span class="icons">
-            							<span class="icon-unchecked"></span>
-            							<span class="icon-checked"></span>
-            						</span>
-           							Sử dụng địa điểm hiện tại
-          					</label>
-          					<label class="radio">
-            					<input type="radio" name="positionOptions" id="posOption2" value="anotherPos" data-toggle="radio" class="custom-radio">
-            						<span class="icons">
-            							<span class="icon-unchecked"></span>
-            							<span class="icon-checked"></span>
-            						</span>
-           							 Sử dụng địa điểm khác
-          					</label>
-          					<div class="map">
+							<div class="row">	
+            					<input class="form-control" id="search-location-text" type="search" placeholder='Tim dia diem' value='${search}'>
+							</div>
+          					<div class="map">         					
     							<div id="map" style="width:100%;height: 100%"></div>
     						</div>
           					<div id="posDetail">
            						<label>Địa chỉ được chọn</label>
            						<p/>
-           						<span id="error.address" class="message_error"></span>
-           						<input name="address" class="form-control" placeholder="Số nhà, ngõ, đường" type="text" min="5" maxlength="400" autocomplete="on" autofocus="autofocus" required="required"> 
+           						<input id="addressManual" name="addressManual" class="form-control" placeholder="Số nhà, ngõ, đường" type="text" min="5" maxlength="400" autocomplete="on" autofocus="autofocus" required="required"> 
            						<div id="posAdminDetail">
+           						</div>
+           						<div id="posLatLng">
            						</div>
            					</div>
 							<!-- <input name="address" required="required" class="form-control" placeholder="Địa chỉ" style="margin-top: 10px">  -->
@@ -122,45 +111,23 @@ function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
      	zoom: 15
      });
-	var currentPos = findCurrentPos();
-	//var infowindow = new google.maps.InfoWindow;
-	//var geocoder = new google.maps.Geocoder;
-	//geocodeLatLng(geocoder,currentPos,infowindow);
+	findCurrentPos(true,3);
+	prepareSearchLocation(document.getElementById('search-location-text'),true,3);
 };
 
-function geocodeLatLng(geocoder, latlng) {
-	console.log(latlng);
-    geocoder.geocode({'location': latlng}, function(results, status) {
-      if (status === 'OK') {
-    	console.log('Result');
-    	console.log(results);
-        if (results[1]) {
-          map.setZoom(11);
-          var marker = new google.maps.Marker({
-            position: latlng,
-            map: map
-          });
-          //infowindow.setContent(results[1].formatted_address);
-          //infowindow.open(map, marker);
-        } else {
-          window.alert('No results found');
-        }
-      } else {
-        window.alert('Geocoder failed due to: ' + status);
-      }
-    });
-};
-    
-var cleanMap = function(){
-	
+var updateAdminInfo = function(specificAddress,adminAddress,note){
+	$("#addressManual").val(specificAddress);
+	var str = "phường " + adminAddress.ward
+			+ ", quận " + adminAddress.district
+			+ ", thành phố " + adminAddress.city
+	$("#posAdminDetail").html(str);
+	$("#posLatLng").html(note);
 }
 
-var processBasePosition = function(postion, map){
-	var marker = new google.maps.Marker({map: map});
-	marker.setPosition(postion);
-    map.setCenter(postion);
-}	
 
+</script>
+
+<script type="text/javascript">
 var paths = [];
 //Disabling autoDiscover, otherwise Dropzone will try to attach twice.
 Dropzone.autoDiscover = false;

@@ -5,7 +5,47 @@
         height: 100%;
       }
     </style>
-    
+	<div class="col-md-12">
+		<form id="form-search">
+			<div class="form-group">
+	        	<div class="input-group">
+	            	<input class="form-control" id="search-location-text" type="search" placeholder='Tim dia diem' value='${search}'>
+	            	<select id="newType" name ="newType"  class="selectpicker" style="width: 150px;" onchange="changeNewsType(this)">
+					  <option value=""><spring:message code="NEWS_CATEGORY"/></option>
+					  <option value="FOR_RENT_APARTMENT"><spring:message code="FOR_RENT_APARTMENT"/></option>
+					  <option value="FOR_RENT_HOUSE"><spring:message code="FOR_RENT_HOUSE"/></option>
+					  <option value="FOR_RENT_HOTEL"><spring:message code="FOR_RENT_HOTEL"/></option>
+					  <option value="FOR_RENT_HOSTEL"><spring:message code="FOR_RENT_HOSTEL"/></option>
+					</select>
+					<select id="price" name ="price"  class="selectpicker" style="width: 150px;" onchange="changePrice(this)">
+					  <option value=""><spring:message code="SEARCH_PRICE"/></option>
+					  <option value="SEARCH_PRICE_200"><spring:message code="SEARCH_PRICE_200"/></option>
+					  <option value="SEARCH_PRICE_300"><spring:message code="SEARCH_PRICE_300"/></option>
+					  <option value="SEARCH_PRICE_400"><spring:message code="SEARCH_PRICE_400"/></option>
+					  <option value="SEARCH_PRICE_500"><spring:message code="SEARCH_PRICE_500"/></option>
+					  <option value="SEARCH_PRICE_1000"><spring:message code="SEARCH_PRICE_1000"/></option>
+					  <option value="SEARCH_PRICE_2000"><spring:message code="SEARCH_PRICE_2000"/></option>
+					  <option value="SEARCH_PRICE_3000"><spring:message code="SEARCH_PRICE_3000"/></option>
+					  <option value="SEARCH_PRICE_5000"><spring:message code="SEARCH_PRICE_5000"/></option>
+					  <option value="SEARCH_PRICE_8000"><spring:message code="SEARCH_PRICE_8000"/></option>
+					</select>
+					<select id="beds" name ="beds"  class="selectpicker" style="width: 150px;" onchange="changeBeds(this)">
+					  <option value=""><spring:message code="SEARCH_BEDS"/></option>
+					  <option value="SEARCH_BEDS_1"><spring:message code="SEARCH_BEDS_1"/></option>
+					  <option value="SEARCH_BEDS_2"><spring:message code="SEARCH_BEDS_2"/></option>
+					  <option value="SEARCH_BEDS_3"><spring:message code="SEARCH_BEDS_3"/></option>
+					  <option value="SEARCH_BEDS_4"><spring:message code="SEARCH_BEDS_4"/></option>
+					  <option value="SEARCH_BEDS_5"><spring:message code="SEARCH_BEDS_5"/></option>
+					  <option value="SEARCH_BEDS_6"><spring:message code="SEARCH_BEDS_6"/></option>
+					</select>
+	            	<span class="input-group-btn">
+	                	<!-- <button type="submit" class="btn" id="search-within-time"><span class="fui-search"></span></button>  -->
+	                	<button class="btn" id="search-location"><span class="fui-search"></span></button>
+	                </span>
+	        	</div>
+	        </div>
+        </form>
+	</div>
 	<div class="row" >
 		<div class="col-md-5 news-container" style="height: 500px;overflow-y: scroll;">
 			<div class="row" id="new-row"></div>
@@ -27,9 +67,8 @@
 	
     
     <script>
-	 
-    var targetMarkers = [];
-    var polygons = [];
+    
+    var targetMarkers = []; 
     var $newsRow = $("#new-row");
     var currentNews = [];
     var currentMarker;
@@ -41,16 +80,16 @@
 	     });
 	        //var infoWindow = new google.maps.InfoWindow({map: map});
 	     //searchBox.setBounds(map.getBounds());
-	    var searchBox = prepareSearchLocation(map,document.getElementById('search-location-text'));
+	    var searchBox = prepareSearchLocation(document.getElementById('search-location-text'),false,2);
 	    if ($("#search-location-text").val() === ''){
-	    	findCurrentPos(map,polygons,2);
+	    	findCurrentPos(false,2);
 	    } else {
-	    	seachPosAtStart(map,$("#search-location-text").val(),searchBox);
+	    	seachPosAtStart($("#search-location-text").val(),searchBox);
 	    }	    
-	    addListenerIdleToMap(map);   	
+	    addListenerIdleToMap();   	
 	};
 	
-	var addListenerIdleToMap = function(map){
+	var addListenerIdleToMap = function(){
 		map.addListener('idle', function() {
 		   	 if (map.getBounds() != null){
 		   		var bound = {
@@ -60,7 +99,7 @@
 		   				northeastLongitude: map.getBounds().b.f,
 		   			}
 		   		//console.log(map.getBounds());
-		   		loadTargetsInBound(map,bound,true);
+		   		loadTargetsInBound(bound,false);
 		   	 }		   		
 		     });
 	};
@@ -71,7 +110,7 @@
 	 });
 	*/		
 		
-	var loadTargetsInBound = function(map,bound,isClustered){
+	var loadTargetsInBound = function(bound,isClustered){
 		var iconHousePos = {
 				  url: ctx + "/resources/img/icons/map/housePos.ico", // url
 				  scaledSize: new google.maps.Size(40,40), // scaled size
@@ -107,9 +146,9 @@
 				//console.log(currentNews.length);
 				
 				if (isClustered){
-					clusterMarkers(map,targetMarkers);
+					clusterMarkers(targetMarkers);
 				}
-				autoClickCoMarker(map,isClustered);
+				autoClickCoMarker(isClustered);
 			},complete: function(){
 				return true;		
 			},error : function(request, status, error,event){
@@ -119,7 +158,7 @@
 		});
 	}
 	
-	var autoClickCoMarker = function(map,isClustered){
+	var autoClickCoMarker = function(isClustered){
 		$("#new-row .item").on("mouseenter",function(){
 			var obj =$(this).data();
 			if (currentMarker != undefined){
@@ -129,7 +168,7 @@
 					currentMarker.setMap(null);
 					//add 1 to ClusterIcon if want more exact result
 				}		
-			} 
+			}
 			$.each(targetMarkers, function(index, item){
 				if (item.id === obj.objectId){
 					//google.maps.event.trigger(item, 'click');
@@ -163,8 +202,12 @@
 				  origin: new google.maps.Point(0,0), // origin
 				  anchor: new google.maps.Point(0, 0), // anchor
 				};
-		var placeInfoWindow = new google.maps.InfoWindow();
-		placeInfoWindow.setContent(showNews(obj).html());
+		var placeInfoWindow = new google.maps.InfoWindow({
+			disableAutoPan: true,
+			content: showNews(obj).html(),
+			maxHeight:200,
+			maxWidth:200
+		});
 		var marker = new google.maps.Marker({
 		 	map: map,
             position: {lat:obj.location.latitude, lng:obj.location.longitude},
@@ -172,7 +215,7 @@
 			icon: iconHousePos,
             id: obj.objectId,
             infowindow: placeInfoWindow,
-            label: obj.price
+            //label: obj.price
           });
 		
 		targetMarkers.push(marker);
@@ -244,13 +287,9 @@
 		targetMarkers = [];
 	}
 	
-	var cleanPolygons = function(){
-		$.each(polygons, function(index,item){
-			item.setMap(null)
-		});
-		polygons = [];
+	var getPolygons = function(){
+		return polygons;
 	}
-	
     </script>
 
 	<script
