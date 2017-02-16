@@ -24,7 +24,7 @@
 			password-parameter="PASSWORD" />
 		<logout logout-success-url="/authen/login?logout"  />
 		<!-- enable csrf protection -->
-		<csrf/>
+		<csrf disabled="true"/>
 	</http>
 	<global-method-security pre-post-annotations="enabled" />
 	<!-- Select users and user_roles from database -->

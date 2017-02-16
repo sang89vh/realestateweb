@@ -5,6 +5,11 @@ public class GeoBox {
 	private double southwestLongitude;
 	private double northeastLatitude;
 	private double northeastLongitude;
+	
+	private String newType;
+	private String price;
+	private String beds;
+	
 	public double getSouthwestLatitude() {
 		return southwestLatitude;
 	}
@@ -28,6 +33,24 @@ public class GeoBox {
 	}
 	public void setNortheastLongitude(double northeastLongitude) {
 		this.northeastLongitude = northeastLongitude;
+	}
+	public String getNewType() {
+		return newType;
+	}
+	public void setNewType(String newType) {
+		this.newType = newType;
+	}
+	public String getPrice() {
+		return price;
+	}
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	public String getBeds() {
+		return beds;
+	}
+	public void setBeds(String beds) {
+		this.beds = beds;
 	}
 	
 	

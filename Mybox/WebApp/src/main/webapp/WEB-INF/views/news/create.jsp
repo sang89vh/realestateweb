@@ -8,7 +8,7 @@
 </style>
 <div class="row">
 	<div class="col-md-12" id="form-create"  style="margin-top: 10px">
-				<form  id="form-create-news" action="${ctx}/news/create-news" method="post" data-action="saveForm" data-callback="saveNewsCallback">
+				<form  id="form-create-news" action="${ctx}/member/create-news" method="post" data-action="saveForm" data-callback="saveNewsCallback">
 					<div class="col-md-12" style="background-color: #474e52; color: white;margin-bottom: 10px;">
 						<h6>Thông tin nhà đất</h6>
 					</div>
@@ -21,15 +21,11 @@
 						<div class="col-md-3">
 							<span id="error.newType" class="message_error"></span>
 							<select id="newType" name ="newType"  class="selectpicker" style="width: 100%">
-							  <option value="">Phân loại</option>
-							  <option value="SELL_APARTMENT">Bán căn hộ chung chư</option>
-							  <option value="SELL_HOUSE">Bán nhà riêng</option>
-							  <option value="SELL_HOUSE_ADJACENT">Bán nhà biệt thự liền kề</option>
-							  <option value="SELL_HOUSE_FRONT_ROAD">Bán nhà mặt phố</option>
-							  <option value="SELL_LAND_PROECT">Bán đất nền dự án</option>
-							  <option value="SELL_LAND">Bán đất</option>
-							  <option value="SELL_FARM">Bán trang trại, khu nghỉ dưỡng</option>
-							  <option value="SELL_STORE_HOUSE">Bán kho, nhà xưởng</option>
+							  <option value=""><spring:message code="NEWS_CATEGORY"/></option>
+							  <option value="FOR_RENT_APARTMENT"><spring:message code="FOR_RENT_APARTMENT"/></option>
+							  <option value="FOR_RENT_HOUSE"><spring:message code="FOR_RENT_HOUSE"/></option>
+							  <option value="FOR_RENT_HOTEL"><spring:message code="FOR_RENT_HOTEL"/></option>
+							  <option value="FOR_RENT_HOSTEL"><spring:message code="FOR_RENT_HOSTEL"/></option>
 							</select>
 						</div>
 					</div>
@@ -45,11 +41,10 @@
 						<div class="col-md-3">
 							<span id="error.priceUnit" class="message_error"></span>
 							<select id="priceUnit" name="priceUnit"  class="selectpicker" required="required">
-							  <option value="">Đơn vị</option>
-							  <option value="MILLION_PER_MONTH">Triệu/Tháng</option>
-							  <option value="MILLION_PER_SQUARE_METER">Triệu/M2</option>
-							  <option value="HUNDERD_PER_MONTH">Trăm nghìn đồng/Tháng</option>
-							  <option value="HUNDERD_PER_SQUARE_METER">Trăm nghìn đồng/Tháng</option>
+							  <option value=""><spring:message code="PRICE_UNIT"/></option>
+							  <option value="USD_PER_MONTH"><spring:message code="USD_PER_MONTH"/></option>
+							  <option value="VND_MILLION_PER_MONTH"><spring:message code="VND_MILLION_PER_MONTH"/></option>
+							  <option value="VND_HUNDERD_PER_MONTH"><spring:message code="VND_VND_HUNDERD_PER_MONTH"/></option>
 							</select>
 						</div>
 					</div>
@@ -74,10 +69,9 @@
 						</div>
 						<div class="col-md-6">
 
-							<span id="error.address" class="message_error"></span>
-							<input ID="address" name="address" required="required" class="form-control" placeholder="Địa chỉ" style="margin-top: 10px">
-							<input name="lagtitude" type="number" hidden="true" value="105.7839107">
-							<input name="longitude" type="number" hidden="true" value="21.0309421">
+							
+							<input name="latitude" type="number" hidden="true" value="21.0309421">
+							<input name="longitude" type="number" hidden="true" value="105.7839107">
 
 							<h6>Địa chỉ</h6>
 							<label class="radio">
@@ -102,6 +96,7 @@
           					<div id="posDetail">
            						<label>Địa chỉ được chọn</label>
            						<p/>
+           						<span id="error.address" class="message_error"></span>
            						<input name="address" class="form-control" placeholder="Số nhà, ngõ, đường" type="text" min="5" maxlength="400" autocomplete="on" autofocus="autofocus" required="required"> 
            						<div id="posAdminDetail">
            						</div>
@@ -116,7 +111,7 @@
 						</div>
 					</div>
 					<div class="" style="margin-top: 10px">
-						<button type="button" class="btn btn-primary" onclick="submitForm(this)">Đăng tin</button>
+						<button type="button" class="btn btn-primary" style="float: right;" onclick="preSubmitForm(this)">Đăng tin</button>
 					</div>
 					
 				</form>
@@ -175,7 +170,7 @@ Dropzone.autoDiscover = false;
 $(function() {
   // Now that the DOM is fully loaded, create the dropzone, and setup the
   // event listeners
-  var myDropzone = new Dropzone("#my-dropzone", { url: ctx + "/news/uploadImages",addRemoveLinks:true});
+  var myDropzone = new Dropzone("#my-dropzone", { url: ctx + "/member/uploadImages",addRemoveLinks:true});
   myDropzone.on("addedfile", function(file) {
     /* Maybe display some more file information on your page */
     console.log("adding file");
@@ -202,75 +197,16 @@ $(function() {
   });
   $("#my-dropzone").addClass("dropzone");
 })
-
+var preSubmitForm = function(btn){
+	$("#imageIds").val(paths.toString());
+	submitForm(btn);
+}
 var saveNewsCallback = function(form,data){
 	console.log(data);
-	window.location.href=ctx+'/thanh-vien/quan-ly-tin';
+	window.location.href=ctx+'/member/manage-news';
 }
 
-function showFormError(restError, formId) {
 
-	hiddeFormError(formId);
-	var fieldErrors = restError.fieldErrors;
-
-	$.each(fieldErrors, function(index, value) {
-
-		$('form#' + formId + ' #' + value.fieldId).addClass('input_error');
-		$field = $('form#' + formId + ' #error\\.' + value.fieldId);
-
-		$field.text(value.errorMessage);
-	});
-}
-var saveForm = function(form,callback){
-		console.log("saveForm go");
-		
-		var myFormId= $(form).attr('id');
-		
-		console.log("saveFormAjax>>"+myFormId);
-		
-		var $myForm = $("#"+myFormId);
-		// Find disabled inputs, and remove the "disabled" attribute
-		var disabled = $myForm.find(':input:disabled').removeAttr('disabled');
-		var formData = $myForm.serialize();
-		// re-disabled the set of inputs that you previously enabled
-		disabled.attr('disabled','disabled');
-		
-		var action = $("#"+myFormId).attr("action");
-		
-		$.ajax({ 
-			url: action , 
-			type: 'post', 
-			data: formData,
-			cache:false,
-			suppressErrors:false,
-			formId:myFormId,
-			success: function(data, textStatus, jqXHR) {
-				
-					console.log("saveFormAjax success");
-					//hidde all error
-					hiddeFormError(myFormId);
-					
-					//call action callback with current form
-					if(callback){
-						eval(callback+'(form, data)');
-					}else{
-						showSaveSuccessNotification();
-					}
-					
-									
-				
-			},complete: function(){
-				console.log("saveFormAjax complete");
-				return true;
-				
-			},error : function(request, status, error,event){
-				console.log("saveFormAjax error");
-				showSaveErrorNotification();
-				return false;
-			}
-		});
-	}
-	
 $(document).ready(function(){
 	$("#posOption2").change(function(){ 
         if( $(this).is(":checked") ){ 
