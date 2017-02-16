@@ -100,7 +100,7 @@ public class MB0001Controller extends MBBaseController {
 		ParseUser user = new ParseUser();
 		user.setUsername(userModel.getUsername());
 		user.setPassword(userModel.getPassword());
-		user.put("role", "ADMIN");
+		user.put("role", "ROLE_MEMBER");
 		user.save();
 		return user.getData();
 	}

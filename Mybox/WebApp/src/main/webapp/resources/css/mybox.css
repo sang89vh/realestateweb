@@ -29,3 +29,8 @@
 .input_error{
 	border:1px solid red!important;
 }
+
+.bootstrap-select .btn-default{
+	background-color: #fff!important;
+	color:#555!important;
+}

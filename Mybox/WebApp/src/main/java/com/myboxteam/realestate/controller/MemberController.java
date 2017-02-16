@@ -42,6 +42,7 @@ public class MemberController {
 		return mav;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/create-news", method = RequestMethod.POST)
 	public @ResponseBody Map save(@ModelAttribute("newsForm") NewsForm newsForm)
 			throws Exception {
@@ -58,10 +59,11 @@ public class MemberController {
 		po.put("price", newsForm.getPrice());
 		po.put("priceUnit", newsForm.getPriceUnit());
 		po.put("thumbs", newsForm.getImageIds());
-		if (newsForm.getLagtidue() != null) {
-			po.put("location", new ParseGeoPoint(newsForm.getLagtidue(),
+		if (newsForm.getLatitude() != null) {
+			po.put("location", new ParseGeoPoint(newsForm.getLatitude(),
 					newsForm.getLongitude()));
 		}
+		po.put("createdBy", MBUtils.getCurrentUser());
 		po.save();
 
 		return po.getData();

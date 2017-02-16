@@ -27,6 +27,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.parse4j.ParseObject;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,9 +37,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myboxteam.core.config.MBConfig;
 import com.myboxteam.core.exception.ErrorCodeEnumImpl;
 import com.myboxteam.core.exception.MBException;
+
 public class MBUtils {
 	private static PrettyTime prettyTime = new PrettyTime(new Locale("vi"));
-	
+
 	private static final Logger logger = LogManager.getLogger(MBUtils.class);
 	private static final SimpleDateFormat YYYYMMDD_DATE_FORMAT = new SimpleDateFormat(
 			"yyyyMMdd");
@@ -136,7 +139,6 @@ public class MBUtils {
 			return null;
 		}
 	}
-
 
 	public static String getXmlFromUrl(String url) throws IOException {
 		StringBuffer xmlSource = new StringBuffer();
@@ -366,17 +368,21 @@ public class MBUtils {
 
 		return list;
 	}
-	public static String convertDateToPrettyTime(Object myDate) throws ParseException{
-		if(null==myDate){
+
+	public static String convertDateToPrettyTime(Object myDate)
+			throws ParseException {
+		if (null == myDate) {
 			return "";
-		}else if(myDate instanceof String){
-			return prettyTime.format(DDhpMM_YYYY_DATE_FORMAT.parse(((String)myDate)));
-		}else if(myDate instanceof Date){
-			return prettyTime.format((Date)myDate);
+		} else if (myDate instanceof String) {
+			return prettyTime.format(DDhpMM_YYYY_DATE_FORMAT
+					.parse(((String) myDate)));
+		} else if (myDate instanceof Date) {
+			return prettyTime.format((Date) myDate);
 		}
 		return "";
-		
+
 	}
+
 	public static String generateFileName(String extension) {
 
 		Calendar cal = Calendar.getInstance();
@@ -385,10 +391,9 @@ public class MBUtils {
 
 	}
 
-
 	public static void saveFile(String output, MultipartFile file) {
 		logger.info("do upload file");
-		String fullPathfile = MBConfig.PATH_IMAGE + File.separatorChar+output;
+		String fullPathfile = MBConfig.PATH_IMAGE + File.separatorChar + output;
 		try {
 			BufferedOutputStream stream = new BufferedOutputStream(
 					new FileOutputStream(new File(fullPathfile)));
@@ -403,6 +408,13 @@ public class MBUtils {
 
 		logger.info("upload file end:" + fullPathfile);
 
+	}
+
+	public static String getCurrentUser() {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		String name = auth.getName();
+		return name;
 	}
 
 }

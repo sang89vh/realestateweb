@@ -19,11 +19,19 @@
 			
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
+			<li>
+				<a href="#" onclick="changeLanguage('vn')" style="float: left;">
+					<img alt="Tiếng Việt" src="${ctx}/resources/img/Vietnam.png" style="width: 25px;height: 25px;">
+				</a>
+				<a href="#" onclick="changeLanguage('en')" style="float: left;">
+					<img alt="English" src="${ctx}/resources/img/United_Kingdom.png" style="width: 25px;height: 25px;">
+				</a>
+			</li>
 			<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Tài khoản<b class="caret"></b></a> 
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="menu.account"/><b class="caret"></b></a> 
 					<span class="dropdown-arrow"></span>
 				<ul class="dropdown-menu">
-					<li><a href="<c:url value='/xac-thuc/dang-xuat' />">Đăng xuất</a></li>
+					<li><a href="<c:url value='/authen/logout' />">Đăng xuất</a></li>
 				</ul></li>
 		</ul>
 	</div>

@@ -1,5 +1,6 @@
 package com.myboxteam.realestate.form;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -22,9 +23,11 @@ public class NewsForm  extends BaseForm{
 	private String newType;
 	
 	@NotNull
+	@Min(0)
 	private Long acreage;
 	
 	@NotNull
+	@Min(0)
 	private Long price;
 	
 	@NotNull
@@ -48,10 +51,10 @@ public class NewsForm  extends BaseForm{
 	private String mobile;
 	
 	@NotNull
-	private Long longitude;
+	private Double longitude;
 	
 	@NotNull
-	private Long lagtidue;
+	private Double latitude;
 	
 	
 	public String getTitle() {
@@ -109,17 +112,17 @@ public class NewsForm  extends BaseForm{
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public Long getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(Long longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
-	public Long getLagtidue() {
-		return lagtidue;
+	public Double getLatitude() {
+		return latitude;
 	}
-	public void setLagtidue(Long lagtidue) {
-		this.lagtidue = lagtidue;
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
 	}
 
 }

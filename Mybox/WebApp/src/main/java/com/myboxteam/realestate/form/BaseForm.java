@@ -1,7 +1,6 @@
 package com.myboxteam.realestate.form;
 
 import java.io.Serializable;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -19,7 +18,6 @@ public class BaseForm implements Serializable{
 
 	private static final long serialVersionUID = 1961134350530282846L;
 	protected static Validator validator;
-	protected Locale locale; 
 	public BaseForm() {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
@@ -79,4 +77,6 @@ public class BaseForm implements Serializable{
 
 		return prm;
 	}
+
+	
 }
