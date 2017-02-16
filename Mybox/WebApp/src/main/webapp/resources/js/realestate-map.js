@@ -1,4 +1,9 @@
-var findCurrentPos = function(map,polygons,adminLevel){
+var map;
+var polygons = [];
+var currentBaseMarker;
+var adminAddress = {};
+
+var findCurrentPos = function(isDraggable,adminLevel){
 	cleanMap();	
 	var currentPos;
 	var markerCurrentPos = new google.maps.Marker({map: map, title: 'You are here'});
@@ -10,9 +15,10 @@ var findCurrentPos = function(map,polygons,adminLevel){
           lng: position.coords.longitude
         };
         
-        addBaseMarkerToPos(currentPos,map,'You are here');
+        //addBaseMarkerToPos(currentPos,map,'You are here');
+        addBaseMarkerToPos(currentPos.lat,currentPos.lng,'You are here',isDraggable,adminLevel);
 	    map.setCenter(currentPos);
-	    findPosAdminInfo(currentPos.lat,currentPos.lng,map,polygons,adminLevel);
+	    //findPosAdminInfo(currentPos.lat,currentPos.lng,map,polygons,adminLevel);
       }, function() {
         handleLocationError(true, map.getCenter());
       });
@@ -26,23 +32,15 @@ var handleLocationError = function(isBrowserSupport, mapCenter){
 	alert('location error');
 }
 
-/**
- * level 1
- * level 2 = quan
- * level 3 = phuong
- */
-var findPosAdminInfo = function (lat,lng,map,polygons,level){
-	console.log('findAdminInfo');
+
+var getPosAdminInfo = function(lat,lng,level,callBack){
 	var geocoder = new google.maps.Geocoder;
-	var adminAddress = {};
 	var pos = {
 		lat: lat,
 		lng: lng
 	}
 	geocoder.geocode({'location': pos}, function(results, status) {
           if (status === 'OK') {
-        	  console.log('Results');
-        	  console.log(results);
             if (results[0]) {     
             	$.each(results, function(index,item){
             		if (item.types[0] === "administrative_area_level_3" && item.types[1] === "political"){
@@ -51,78 +49,110 @@ var findPosAdminInfo = function (lat,lng,map,polygons,level){
             			adminAddress.city =  item.address_components[2].long_name;
             		}
             	})
-            	if (adminAddress.ward != null && adminAddress.district != null  && adminAddress.city != null){
-            		var para;
-            		switch (level) {
-					case 1:
-						para = adminAddress.city;
-						break;
-					case 2:
-						para = "quan " + adminAddress.district +"," + adminAddress.city;
-						break;
-					case 3:
-						para = "phuong " + adminAddress.ward + ",quan " + adminAddress.district +"," + adminAddress.city;
-						break;
-					default:
-						break;
-					}
-            		if (para !== null && para !== undefined){
-            			$.ajax({ 
-            				url: ctx + '/map/get-polygon' , 
-            				//type: 'post', 
-            				data: {name: para},
-            				cache:false,
-            				suppressErrors:false,
-            				success: function(data, textStatus, jqXHR) {
-            					$.each(data, function(index,item){
-            						var paths = [];
-            						$.each(item.Polygon, function(index1,item1){
-            							var path = {
-            									lat: item1.latitude,
-            									lng: item1.longitude
-            							}
-            							paths.push(path);
-            						})            					      
-            					    var polygon = new google.maps.Polygon({
-            					          paths: paths,
-            					          strokeColor: '#FF0000',
-            					          strokeOpacity: 0.1,
-            					          strokeWeight: 0,
-            					          fillColor: '#FF0000',
-            					          fillOpacity: 0.1
-            					        });
-            						polygon.setMap(map);
-            						polygons.push(polygon);	        					        
-            					})
-            					
-            				},complete: function(){
-            					return true;		
-            				},error : function(request, status, error,event){
-            					return false;
-            				}
-            			});
-            		}
-    				
-    				
-    			}
+            	var str = "Latitude: " + pos.lat + ", Longitude: " + pos.lng;
+            	updateAdminInfo(results[0].formatted_address, adminAddress, str);
+            	callBack(adminAddress,level);
             } else {
               window.alert('No results found');
             }
+            
           } else {
-            window.alert('Geocoder failed due to: ' + status);
+              window.alert('Geocoder failed due to: ' + status);
           }
-        });		
-};
+	})
+}
 
-var addBaseMarkerToPos = function(pos,map,content){
-	console.log('add marker');
+/**
+ * level 1
+ * level 2 = quan
+ * level 3 = phuong
+ */
+var drawAdminInfo = function(adminAddress,level){
+	if (adminAddress.ward != null && adminAddress.district != null  && adminAddress.city != null){
+		var para;
+		switch (level) {
+		case 1:
+			para = adminAddress.city;
+			break;
+		case 2:
+			para = "quan " + adminAddress.district +"," + adminAddress.city;
+			break;
+		case 3:
+			para = "phuong " + adminAddress.ward + ",quan " + adminAddress.district +"," + adminAddress.city;
+			break;
+		default:
+			break;
+		}
+		if (para !== null && para !== undefined){
+			$.ajax({ 
+				url: ctx + '/map/get-polygon' , 
+				//type: 'post', 
+				data: {name: para},
+				cache:false,
+				suppressErrors:false,
+				success: function(data, textStatus, jqXHR) {
+					$.each(data, function(index,item){
+						var paths = [];
+						$.each(item.Polygon, function(index1,item1){
+							var path = {
+									lat: item1.latitude,
+									lng: item1.longitude
+							}
+							paths.push(path);
+						})            					      
+					    var polygon = new google.maps.Polygon({
+					          paths: paths,
+					          strokeColor: '#FF0000',
+					          strokeOpacity: 0.1,
+					          strokeWeight: 0,
+					          fillColor: '#FF0000',
+					          fillOpacity: 0.1
+					        });
+						polygon.setMap(map);
+						polygons.push(polygon);	        					        
+					})
+					
+				},complete: function(){
+					return true;		
+				},error : function(request, status, error,event){
+					return false;
+				}
+			});
+		}   				
+	}
+}
+
+var addBaseMarkerToPos = function(lat,lng,content,isDraggable,adminLevel){
 	var infoWindow = new google.maps.InfoWindow({content: content});
+    var pos = {
+    		lat: lat,
+    		lng: lng
+    }
+    
+    if (currentBaseMarker != undefined){
+    	currentBaseMarker.setMap(null);
+    }
     
     baseMarker = new google.maps.Marker({
 		map:map,
 		position:pos,
 		infoWindow:infoWindow});
 	
+    getPosAdminInfo(lat,lng,adminLevel,drawAdminInfo);
+    if (isDraggable) {
+    	baseMarker.setDraggable(true);
+    	google.maps.event.addListener(baseMarker, 'dragend', function(evt) 
+    			{
+    				var str = "Is this your house?"
+    					+ "<p/>"
+    					+ "Tips: use Sattellite view for more exact result"
+    				cleanMap();
+    				baseMarker.infoWindow.setContent(str);
+    				getPosAdminInfo(evt.latLng.lat(),evt.latLng.lng(),adminLevel,drawAdminInfo);
+    			});
+
+    }
+    
 	baseMarker.addListener('click', function() {
         if (infoWindow.marker == this) {
           console.log("This infowindow already is on this marker!");
@@ -133,18 +163,16 @@ var addBaseMarkerToPos = function(pos,map,content){
             });
         }
   	});
-	
-	
+	currentBaseMarker = baseMarker;
+	//drawPosAdminInfo(pos.lat,pos.lng,adminLevel);	
 	return baseMarker;
 }
 
-var getPlaceGGInfo = function(place,polygons,map){
+var getPlaceGGInfo = function(place,isDraggable,adminLevel){
 	var service = new google.maps.places.PlacesService(map);
     service.getDetails({
       placeId: place.place_id
     }, function(place, status) {
-//    	console.log('Place');
-//    	console.log(place);
     	if (status === google.maps.places.PlacesServiceStatus.OK) {
             // Set the marker property on this infowindow so it isn't created again.
             var innerHTML = '<div>';
@@ -171,14 +199,14 @@ var getPlaceGGInfo = function(place,polygons,map){
               innerHTML += '<br><br><img src="' + place.photos[0].getUrl(
                   {maxHeight: 100, maxWidth: 200}) + '">';
             }
-            innerHTML += '</div>';      
-            addBaseMarkerToPos(place.geometry.location,map,innerHTML);
+            innerHTML += '</div>';  
+            addBaseMarkerToPos(place.geometry.location.lat(),place.geometry.location.lng(),innerHTML,isDraggable,adminLevel);
           }
     });
   
 }
 
-var seachPosAtStart = function(map,query,searchBox){
+var seachPosAtStart = function(query,searchBox){
 	service = new google.maps.places.PlacesService(map);
 	request = {
 			query: query
@@ -190,7 +218,8 @@ var seachPosAtStart = function(map,query,searchBox){
        });
 }
 
-var prepareSearchLocation = function(map,searchAddressElement){
+var prepareSearchLocation = function(searchAddressElement,isDraggable,adminLevel){
+	cleanMap();
 	var locationAutocomplete = new google.maps.places.Autocomplete(searchAddressElement);
 	var searchBox = new google.maps.places.SearchBox(searchAddressElement);
 		 //var searchBox = new google.maps.places.Autocomplete(searchAddress);
@@ -204,7 +233,6 @@ var prepareSearchLocation = function(map,searchAddressElement){
 	       // more details for that place.
 	      
 	searchBox.addListener('places_changed', function() {
-	 	console.log('place changed');
 	   	cleanMap();
 	    var places = searchBox.getPlaces();
 	    if (places.length == 0) {
@@ -218,8 +246,7 @@ var prepareSearchLocation = function(map,searchAddressElement){
 	           	console.log("Returned place contains no geometry");
 	           	return;
 	    		}
-	          	getPlaceGGInfo(place,polygons,map);
-	          	findPosAdminInfo(place.geometry.location.lat(),place.geometry.location.lng(),map,polygons,2);
+	          	getPlaceGGInfo(place,isDraggable,adminLevel);
 	          	if (place.geometry.viewport) {
 	                    // Only geocodes have viewport.
 	               bounds.union(place.geometry.viewport);
@@ -227,15 +254,14 @@ var prepareSearchLocation = function(map,searchAddressElement){
 	               bounds.extend(place.geometry.location);
 	                  }
 	            })
+	            
 	            map.fitBounds(bounds);
 	            oldBound = map.getBounds();
 		 })
 	return searchBox;	 
 };
 
-var clusterMarkers = function(map,markers){
-	console.log('cluster now');
-	
+var clusterMarkers = function(markers){
 	var mcOptions = {
 			gridSize: 50,
 			//maxZoom: 15,
@@ -257,4 +283,19 @@ var clusterMarkers = function(map,markers){
 			infowindow.open(map);
 		}
 	});
+}
+
+var updateAdminInfo = function(specificAddress,adminAddress,note){
+	
+}
+
+var cleanMap = function(){
+	cleanPolygons();
+}
+
+var cleanPolygons = function(){
+	$.each(polygons, function(index,item){
+		item.setMap(null)
+	});
+	polygons = [];
 }
