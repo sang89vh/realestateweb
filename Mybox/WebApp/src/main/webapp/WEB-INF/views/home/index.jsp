@@ -8,45 +8,7 @@
       }
     </style>
 	<div class="col-md-12">
-		<form id="form-search">
-			<div class="form-group">
-	        	<div class="input-group">
-	            	<input class="form-control" id="search-location-text" type="search" placeholder='Tim dia diem' value='${search}'>
-	            	<select id="newType" name ="newType"  class="selectpicker" style="width: 150px;" onchange="changeNewsType(this)">
-					  <option value=""><spring:message code="NEWS_CATEGORY"/></option>
-					  <option value="FOR_RENT_APARTMENT"><spring:message code="FOR_RENT_APARTMENT"/></option>
-					  <option value="FOR_RENT_HOUSE"><spring:message code="FOR_RENT_HOUSE"/></option>
-					  <option value="FOR_RENT_HOTEL"><spring:message code="FOR_RENT_HOTEL"/></option>
-					  <option value="FOR_RENT_HOSTEL"><spring:message code="FOR_RENT_HOSTEL"/></option>
-					</select>
-					<select id="price" name ="price"  class="selectpicker" style="width: 150px;" onchange="changePrice(this)">
-					  <option value=""><spring:message code="SEARCH_PRICE"/></option>
-					  <option value="SEARCH_PRICE_200"><spring:message code="SEARCH_PRICE_200"/></option>
-					  <option value="SEARCH_PRICE_300"><spring:message code="SEARCH_PRICE_300"/></option>
-					  <option value="SEARCH_PRICE_400"><spring:message code="SEARCH_PRICE_400"/></option>
-					  <option value="SEARCH_PRICE_500"><spring:message code="SEARCH_PRICE_500"/></option>
-					  <option value="SEARCH_PRICE_1000"><spring:message code="SEARCH_PRICE_1000"/></option>
-					  <option value="SEARCH_PRICE_2000"><spring:message code="SEARCH_PRICE_2000"/></option>
-					  <option value="SEARCH_PRICE_3000"><spring:message code="SEARCH_PRICE_3000"/></option>
-					  <option value="SEARCH_PRICE_5000"><spring:message code="SEARCH_PRICE_5000"/></option>
-					  <option value="SEARCH_PRICE_8000"><spring:message code="SEARCH_PRICE_8000"/></option>
-					</select>
-					<select id="beds" name ="beds"  class="selectpicker" style="width: 150px;" onchange="changeBeds(this)">
-					  <option value=""><spring:message code="SEARCH_BEDS"/></option>
-					  <option value="SEARCH_BEDS_1"><spring:message code="SEARCH_BEDS_1"/></option>
-					  <option value="SEARCH_BEDS_2"><spring:message code="SEARCH_BEDS_2"/></option>
-					  <option value="SEARCH_BEDS_3"><spring:message code="SEARCH_BEDS_3"/></option>
-					  <option value="SEARCH_BEDS_4"><spring:message code="SEARCH_BEDS_4"/></option>
-					  <option value="SEARCH_BEDS_5"><spring:message code="SEARCH_BEDS_5"/></option>
-					  <option value="SEARCH_BEDS_6"><spring:message code="SEARCH_BEDS_6"/></option>
-					</select>
-	            	<span class="input-group-btn">
-	                	<!-- <button type="submit" class="btn" id="search-within-time"><span class="fui-search"></span></button>  -->
-	                	<button class="btn" id="search-location"><span class="fui-search"></span></button>
-	                </span>
-	        	</div>
-	        </div>
-        </form>
+		<%@ include file="/WEB-INF/views/common/search_realestate.jsp" %>
 	</div>
 	<div class="row" >
 		<div class="col-md-5 news-container" style="height: 500px;overflow-y: scroll;">
@@ -75,6 +37,8 @@
     var currentNews = [];
     var currentMarker;
     var oldBound;
+    var isClustered = false;
+    var searchPara = {};
 
     var initMap = function() {	
 	    map = new google.maps.Map(document.getElementById('map'), {
@@ -94,14 +58,21 @@
 	var addListenerIdleToMap = function(){
 		map.addListener('idle', function() {
 		   	 if (map.getBounds() != null){
-		   		var bound = {
+		   		/*
+		   		 var bound = {
 		   				southwestLatitude: map.getBounds().f.f,
 		   				southwestLongitude: map.getBounds().b.b,
 		   				northeastLatitude: map.getBounds().f.b,
 		   				northeastLongitude: map.getBounds().b.f,
 		   			}
-		   		//console.log(map.getBounds());
-		   		loadTargetsInBound(bound,false);
+		   		//-console.log(map.getBounds());
+		   		*/
+		   		//loadTargetsInBound(bound,false);
+		   		searchPara.southwestLatitude = map.getBounds().f.f;
+		   		searchPara.southwestLongitude = map.getBounds().b.b;
+		   		searchPara.northeastLatitude = map.getBounds().f.b;
+		   		searchPara.northeastLongitude =  map.getBounds().b.f;
+		   		loadTargetsInBound(searchPara,isClustered);
 		   	 }		   		
 		     });
 	};
@@ -113,6 +84,8 @@
 	*/		
 		
 	var loadTargetsInBound = function(bound,isClustered){
+		currentNews=[];
+		$newsRow.html('');
 		var iconHousePos = {
 				  url: ctx + "/resources/img/icons/map/housePos.ico", // url
 				  scaledSize: new google.maps.Size(40,40), // scaled size
@@ -129,20 +102,20 @@
 			suppressErrors:false,
 			success: function(data, textStatus, jqXHR) {
 				
-				//$newsRow.html('');
+//				cleanMap();
 				$.each(data, function(index, item){
-					var foundNews = false;
-					$.each(currentNews, function(index1,item1){
-						if (item1.objectId === item.objectId){
-							foundNews = true;
-							return false;
-						}
-					})
-					if (!foundNews){
-						$newsRow.append(showNews(item));
+					//var foundNews = false;
+// 					$.each(currentNews, function(index1,item1){
+// 						if (item1.objectId === item.objectId){
+// 							foundNews = true;
+// 							return false;
+// 						}
+// 					})
+// 					if (!foundNews){
+ 						$newsRow.append(showNews(item));
 						attachMarkerToObject(item);
-						currentNews.push(item);
-					}
+ 						currentNews.push(item);
+// 					}
 					
 				});
 				//console.log(currentNews.length);
@@ -260,7 +233,10 @@
 			$a.attr("href",ctx+"/news/property?obj="+obj.objectId
 					+"&lat="+baseMarker.position.lat()
 					+"&lng="+baseMarker.position.lng()
-					+"&search="+encodeURIComponent($("#search-location-text").val()));
+					+"&search="+encodeURIComponent($("#search-location-text").val())
+					+"&type="+$("#type").val()
+					+"&price="+$("#price").val()
+					+"&numBed="+$("#numBed").val());
 			
 			$a.attr("onclick","window.open(this.href); return false;");
 			var $price = $(temp.find(".price")[0]);
@@ -292,6 +268,126 @@
 	var getPolygons = function(){
 		return polygons;
 	}
+	
+	var changeType=function(selectbox){
+		updateSearchType(selectbox);
+		loadTargetsInBound(searchPara,isClustered);
+	}
+	
+	var changePrice=function(selectbox){
+		updateSearchPrice(selectbox);
+		loadTargetsInBound(searchPara,isClustered);
+	}
+
+	var changeNumBed=function(selectbox){
+		updateSearchNumBed(selectbox);
+		loadTargetsInBound(searchPara,isClustered);
+	}
+	
+	var updateSelectedVal = function(){
+		$("#type").val("${type}");
+		$("#price").val("${price}");
+		$("#numBed").val("${numBed}");
+		
+		updateSearchType(document.getElementById('type'));
+		updateSearchPrice(document.getElementById('price'));
+		updateSearchNumBed(document.getElementById('numBed'));
+		
+		loadTargetsInBound(searchPara,isClustered);
+	}
+	
+	var updateSearchType = function(selectbox){
+		searchPara.type = $(selectbox).val();
+	}
+
+	var updateSearchPrice = function(selectbox){
+		var value= $(selectbox).val();
+		var fromPrice=null;
+		var toPrice=null;
+		console.log(value);
+		
+		switch (value) {
+			case  'SEARCH_PRICE_200':
+				fromPrice=200;
+				toPrice=300;
+				break;
+			case  'SEARCH_PRICE_300':
+				fromPrice=300;
+				toPrice=400;
+				break;
+			case  'SEARCH_PRICE_400':
+				fromPrice=400;
+				toPrice=500;
+				break;
+			case  'SEARCH_PRICE_500':
+				fromPrice=500;
+				toPrice=1000;
+				break;
+			case  'SEARCH_PRICE_1000':
+				fromPrice=1000;
+				toPrice=2000;
+				break;
+			case  'SEARCH_PRICE_2000':
+				fromPrice=2000;
+				toPrice=3000;
+				break;
+			case  'SEARCH_PRICE_3000':
+				fromPrice=3000;
+				toPrice=5000;
+				break;
+			case  'SEARCH_PRICE_5000':
+				fromPrice=5000;
+				toPrice=8000;
+				break;
+			case  'SEARCH_PRICE_8000':
+				fromPrice=8000;
+				toPrice=10000;
+				break;
+			default: 
+				fromPrice=null;
+				toPrice=null;
+		}
+		if (fromPrice != null){
+			searchPara.fromPrice = fromPrice;
+		}
+		if (toPrice != null){
+			searchPara.toPrice = toPrice;
+		}
+	}
+
+	var updateSearchNumBed = function(selectbox){
+		var value= $(selectbox).val();
+		console.log(value);
+		var numBed = null;
+		switch (value) {
+			case 'SEARCH_BEDS_1' :
+				numBed = 1;
+				break;
+			case 'SEARCH_BEDS_2' :
+				numBed = 2;
+				break;
+			case 'SEARCH_BEDS_3' :
+				numBed = 3;
+				break;
+			case 'SEARCH_BEDS_4' :
+				numBed = 4;
+				break;
+			case 'SEARCH_BEDS_5' :
+				numBed = 5;
+				break;
+			case 'SEARCH_BEDS_6' :
+				numBed = 6;
+				break;
+			default :
+				numBed = 0;
+		}
+		searchPara.numBed = numBed;
+	}
+	
+	$( document ).ready(function() {
+	    updateSelectedVal();
+	});
+	
     </script>
 
 	<script
