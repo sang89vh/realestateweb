@@ -5,11 +5,10 @@ function initMap() {
      });
 	
 	var targetPos = {
-		lat: lat,
-	    lng: lng
+		lat: parseFloat(lat),
+	    lng: parseFloat(lng)
     };
 	map.setCenter(targetPos);
-	
 	var iconTargetPos = {
 			  url: ctx + "/resources/img/icons/map/selectedHousePos.ico", // url
 			  scaledSize: new google.maps.Size(40,40), // scaled size
@@ -19,17 +18,16 @@ function initMap() {
 	
 	var markerTargetPos = new google.maps.Marker({
 	 	map: map,
-        position: {lat: lat, lng:lng},
+        position: targetPos,
         //title: obj.title,
 		icon: iconTargetPos,
         //id: news.objectId,
         //infowindow: placeInfoWindow,
         //label: "Marker A"
       });
-	
 	var markerBasePos = new google.maps.Marker({
 		map: map,
-        position: {lat: baseLat, lng: baseLng},
+	       position: {lat: parseFloat(baseLat), lng: parseFloat(baseLng)},
 	});
 }
 var searchLocations = function(){
@@ -52,9 +50,9 @@ var searchLocations = function(){
 }
 
 $(document).ready(function() {
- 	$("#type").val("${type}");
- 	$("#price").val("${price}");
- 	$("#numBed").val("${numBed}");
+ 	$("#type").val(type);
+ 	$("#price").val(price);
+ 	$("#numBed").val(numBed);
 	searchLocations();
 });
 

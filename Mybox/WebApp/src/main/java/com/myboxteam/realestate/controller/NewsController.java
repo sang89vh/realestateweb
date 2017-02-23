@@ -74,6 +74,7 @@ public class NewsController extends MBBaseController {
 		
 		mav.addObject("baseLat",request.getParameter("lat"));
 		mav.addObject("baseLng",request.getParameter("lng"));
+		
 
 		mav.addObject("search", request.getParameter("search"));
 
