@@ -149,13 +149,25 @@
 		</div>
 	</div>
 	 -->
+	 <div class="col-md-12">
+	 	<h6>Share/message on Facebook/Twiter</h6>
+		<h6>Review By Stars</h6>
+		
+		<h6>Review will be here</h6>
+		<div class="col-md-12">
+			avatar, comment, date, reply ...
+		</div>
+	</div>
 </div>
 
 	<script type="text/javascript">
-		var lat = ${latitude};
-		var lng = ${longitude};
-		var baseLat = ${baseLat};
-		var baseLng = ${baseLng};
+		var lat = "${latitude}";
+		var lng = "${longitude}";
+		var	baseLat = "${baseLat}";
+		var baseLng = "${baseLng}";
+	 	var type = "${type}";
+	 	var price = "${price}";
+	 	var numBed = "${numBed}";
 	</script>
 
 	<script type="text/javascript" src="${ctx}/resources/js/webapp/news/property.js"></script>
