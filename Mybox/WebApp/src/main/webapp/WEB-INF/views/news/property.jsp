@@ -155,7 +155,14 @@
 		
 		<h6>Review will be here</h6>
 		<div class="col-md-12">
-			avatar, comment, date, reply ...
+		
+			<form  id="form-create-review" action="${ctx}/review/create" method="post" data-action="saveForm" data-callback="saveNewsCallback">
+				<input type="hidden" name="objId" value="${news.objId}"></input>
+				<textarea name="comment" placeholder="Leave a comment..." id="comment" class="form-control"></textarea>
+				<br/>
+				<button type="button" class="btn btn-primary col-md-2 pull-right" onclick="submitForm(this)">Post</button>
+			</form>
+			
 		</div>
 	</div>
 </div>
@@ -171,6 +178,13 @@
 	</script>
 
 	<script type="text/javascript" src="${ctx}/resources/js/webapp/news/property.js"></script>
+	
+	<script type="text/javascript">
+		var saveNewsCallback = function(data){
+			console.log('Submit review callback');
+			console.log(data);
+		}
+	</script>
 	<script
 		src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyCcDHHuK_bGlftUhpq-MWo72JwD0-PYrv8&v=3&callback=initMap">
 	</script>
