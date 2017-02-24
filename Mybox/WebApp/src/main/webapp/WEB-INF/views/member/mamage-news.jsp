@@ -35,7 +35,10 @@
             	    console.log(args.item);
             	    console.log(args.itemIndex);
             	    console.log(args.event);
-                
+            	    
+            	    var url=ctx+"/news/property?obj="+args.item.objectId+"&lat="+args.item.location.latitude+"&lng="+args.item.location.longitude;
+            	    var redirectWindow = window.open(url, '_blank');
+            	    redirectWindow.location;
             	},
             	onItemEditing: function(args) {
             		console.log('onItemEditing');

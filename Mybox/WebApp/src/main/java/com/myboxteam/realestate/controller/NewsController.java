@@ -48,8 +48,8 @@ public class NewsController extends MBBaseController {
 			HttpServletResponse response) throws Exception {
 		
 		String objId = request.getParameter("obj");
-		logger.info(MBUtils.convertDateToPrettyTime(MBUtils.getCurrentDate()));
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("RePlace");
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("ReNews");
+//		ParseQuery<ParseObject> query = ParseQuery.getQuery("RePlace");
 		ParseObject news = query.get(objId);
 		
 		Map<String,Object> data=news.getData();	
