@@ -14,7 +14,8 @@ var findCurrentPos = function(isDraggable,adminLevel){
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        
+        console.log('Curent Pos');
+        console.log(currentPos);
         //addBaseMarkerToPos(currentPos,map,'You are here');
         addBaseMarkerToPos(currentPos.lat,currentPos.lng,'You are here',isDraggable,adminLevel);
 	    map.setCenter(currentPos);
@@ -298,4 +299,13 @@ var cleanPolygons = function(){
 		item.setMap(null)
 	});
 	polygons = [];
+}
+
+var changeType=function(selectbox){
+}
+
+var changePrice=function(selectbox){	
+}
+
+var changeNumBed=function(selectbox){	
 }

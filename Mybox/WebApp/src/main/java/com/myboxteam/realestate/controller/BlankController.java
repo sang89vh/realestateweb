@@ -16,9 +16,22 @@ public class BlankController {
 	@RequestMapping("/")
 	public ModelAndView doIndex(ModelAndView mav, HttpServletRequest request,
 			HttpServletResponse response, 
-			@RequestParam(value="search",required=false) String search) throws Exception {
+			@RequestParam(value="search",required=false) String search,
+			@RequestParam(value="type",required=false) String type,
+			@RequestParam(value="price",required=false) String price,
+			@RequestParam(value="numBed",required=false) String numBed
+			) throws Exception {
 		if (search != null){
 			mav.addObject("search", search);
+		}
+		if (type != null){
+			mav.addObject("type", type);
+		}
+		if (price != null){
+			mav.addObject("price", price);
+		}
+		if (numBed != null){
+			mav.addObject("numBed", numBed);
 		}
 		mav.setViewName("home/index");
 		return mav;

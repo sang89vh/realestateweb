@@ -218,67 +218,12 @@ var changeLanguage = function(lang){
 }
 
 var changeNewsType=function(selectbox){
-	var value= $(selectbox).val();
-	console.log(value);
 }
 
 var changePrice=function(selectbox){
-	var value= $(selectbox).val();
-	var fromPrice=null;
-	var toPrice=null;
-	console.log(value);
-	if('SEARCH_PRICE_200'=== value){
-		fromPrice=200;
-		toPrice=300;
-		
-	}else if ('SEARCH_PRICE_300'=== value) {
-		fromPrice=300;
-		toPrice=400;
-		
-	}else if ('SEARCH_PRICE_400'=== value) {
-		fromPrice=400;
-		toPrice=500;
-	}else if ('SEARCH_PRICE_500'=== value) {
-		fromPrice=500;
-		toPrice=1000;
-	}else if ('SEARCH_PRICE_1000'=== value) {
-		fromPrice=1000;
-		toPrice=2000;
-	}else if ('SEARCH_PRICE_2000'=== value) {
-		fromPrice=2000;
-		toPrice=3000;
-	}else if ('SEARCH_PRICE_3000'=== value) {
-		fromPrice=3000;
-		toPrice=5000;
-	}else if ('SEARCH_PRICE_5000'=== value) {
-		fromPrice=5000;
-		toPrice=8000;
-	}else if ('SEARCH_PRICE_8000'=== value) {
-		fromPrice=8000;
-	}
+	
 }
 
 var changeBeds=function(selectbox){
-	var value= $(selectbox).val();
-	console.log(value);
-	var fromBeds=null;
-	var toBeds=null;
-	if('SEARCH_BEDS_1'=== value){
-		 fromBeds=1;
-		 toBeds=2;
-	}else if ('SEARCH_BEDS_2'=== value) {
-		 fromBeds=2;
-		 toBeds=3;
-	}else if ('SEARCH_BEDS_3'=== value) {
-		 fromBeds=3;
-		 toBeds=4;
-	}else if ('SEARCH_BEDS_4'=== value) {
-		 fromBeds=4;
-		 toBeds=5;
-	}else if ('SEARCH_BEDS_5'=== value) {
-		 fromBeds=5;
-		 toBeds=6;
-	}else if ('SEARCH_BEDS_6'=== value) {
-		 fromBeds=6;
-	}
+	
 }

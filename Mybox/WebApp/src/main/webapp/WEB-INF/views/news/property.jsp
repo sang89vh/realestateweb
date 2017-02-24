@@ -8,169 +8,9 @@
       margin: auto;
   }
   </style>
-<script type="text/javascript">
-function initMap() {
-	map = new google.maps.Map(document.getElementById('map'), {
-     	zoom: 15
-     });
-	//var c = ${news};
-	var lat = ${latitude};
-	var lng = ${longitude};
-	var targetPos = {
-		lat: lat,
-	    lng: lng
-    };
-	map.setCenter(targetPos);
-	
-	var iconTargetPos = {
-			  url: ctx + "/resources/img/icons/map/selectedHousePos.ico", // url
-			  scaledSize: new google.maps.Size(40,40), // scaled size
-			  origin: new google.maps.Point(0,0), // origin
-			  anchor: new google.maps.Point(0, 0), // anchor
-			};
-	
-	var markerTargetPos = new google.maps.Marker({
-	 	map: map,
-        position: {lat: lat, lng:lng},
-        //title: obj.title,
-		icon: iconTargetPos,
-        //id: news.objectId,
-        //infowindow: placeInfoWindow,
-        //label: "Marker A"
-      });
-	
-	var baseLat = ${baseLat};
-	var baseLng = ${baseLng};
-	var markerBasePos = new google.maps.Marker({
-		map: map,
-        position: {lat: baseLat, lng: baseLng},
-	});
-	console.log(lat);
-}
-var searchLocations = function(){
-	var locationAutocomplete = new google.maps.places.Autocomplete(document.getElementById('search-location-text'));
-	var searchAddress =  document.getElementById('search-location-text');
-	var searchBox = new google.maps.places.SearchBox(searchAddress);
-	
-	searchBox.addListener('places_changed', function() {
-		var url = ctx + '?search=' + encodeURIComponent($("#search-location-text").val());
-		var link = document.createElement('a');
-		link.href = url;
-		document.body.appendChild(link);
-		link.click();
-	});
-	
-}
 
-$(document).ready(function() {
-	searchLocations();
-});
-</script>
-<script type="text/javascript">
-var drawGrid = function(obj) {
-
-	$("#jsGrid")
-			.jsGrid(
-					{
-						height : "auto",
-						width : "100%",
-
-						filtering : false,
-						editing : false,
-						sorting : true,
-						paging : true,
-						autoload : true,
-
-						pageSize : 15,
-						pageButtonCount : 5,
-						rowClick : function(row) {
-							console.log(row.item);
-							location.href=ctx+"/news/property/"+row.item.objectId
-						},
-						deleteConfirm : "Do you really want to delete the client?",
-
-						controller : {
-							loadData : function() {
-								var d = $.Deferred();
-
-								$.ajax(
-												{
-													url : ctx + "/map/search-place",
-													dataType : "json",
-													method : 'post',
-													data : obj
-												}).done(function(response) {
-											d.resolve(response);
-										});
-
-								return d.promise();
-							}
-						},
-
-						fields : [
-						           {
-										name : "title",
-										title : "Tiêu đề",
-										type : "text"
-									},
-									{
-										name : "acreage",
-										title : "Diện tích",
-										type : "text"
-										
-									},
-									{
-										name : "price",
-										title : "Giá",
-										type : "text"
-										
-									}
-						          ]
-					});
-
-};
-
-</script>
 <div class="col-md-12">
-		<form id="form-search">
-			<div class="form-group">
-	        	<div class="input-group">
-	            	<input class="form-control" id="search-location-text" type="search" placeholder='Tim dia diem' value='${search}'>
-	            	<select id="newType" name ="newType"  class="selectpicker" style="width: 150px;" onchange="changeNewsType(this)">
-					  <option value=""><spring:message code="NEWS_CATEGORY"/></option>
-					  <option value="FOR_RENT_APARTMENT"><spring:message code="FOR_RENT_APARTMENT"/></option>
-					  <option value="FOR_RENT_HOUSE"><spring:message code="FOR_RENT_HOUSE"/></option>
-					  <option value="FOR_RENT_HOTEL"><spring:message code="FOR_RENT_HOTEL"/></option>
-					  <option value="FOR_RENT_HOSTEL"><spring:message code="FOR_RENT_HOSTEL"/></option>
-					</select>
-					<select id="price" name ="price"  class="selectpicker" style="width: 150px;" onchange="changePrice(this)">
-					  <option value=""><spring:message code="SEARCH_PRICE"/></option>
-					  <option value="SEARCH_PRICE_200"><spring:message code="SEARCH_PRICE_200"/></option>
-					  <option value="SEARCH_PRICE_300"><spring:message code="SEARCH_PRICE_300"/></option>
-					  <option value="SEARCH_PRICE_400"><spring:message code="SEARCH_PRICE_400"/></option>
-					  <option value="SEARCH_PRICE_500"><spring:message code="SEARCH_PRICE_500"/></option>
-					  <option value="SEARCH_PRICE_1000"><spring:message code="SEARCH_PRICE_1000"/></option>
-					  <option value="SEARCH_PRICE_2000"><spring:message code="SEARCH_PRICE_2000"/></option>
-					  <option value="SEARCH_PRICE_3000"><spring:message code="SEARCH_PRICE_3000"/></option>
-					  <option value="SEARCH_PRICE_5000"><spring:message code="SEARCH_PRICE_5000"/></option>
-					  <option value="SEARCH_PRICE_8000"><spring:message code="SEARCH_PRICE_8000"/></option>
-					</select>
-					<select id="beds" name ="beds"  class="selectpicker" style="width: 150px;" onchange="changeBeds(this)">
-					  <option value=""><spring:message code="SEARCH_BEDS"/></option>
-					  <option value="SEARCH_BEDS_1"><spring:message code="SEARCH_BEDS_1"/></option>
-					  <option value="SEARCH_BEDS_2"><spring:message code="SEARCH_BEDS_2"/></option>
-					  <option value="SEARCH_BEDS_3"><spring:message code="SEARCH_BEDS_3"/></option>
-					  <option value="SEARCH_BEDS_4"><spring:message code="SEARCH_BEDS_4"/></option>
-					  <option value="SEARCH_BEDS_5"><spring:message code="SEARCH_BEDS_5"/></option>
-					  <option value="SEARCH_BEDS_6"><spring:message code="SEARCH_BEDS_6"/></option>
-					</select>
-	            	<span class="input-group-btn">
-	                	<!-- <button type="submit" class="btn" id="search-within-time"><span class="fui-search"></span></button>  -->
-	                	<button class="btn" id="search-location"><span class="fui-search"></span></button>
-	                </span>
-	        	</div>
-	        </div>
-        </form>
+		<%@ include file="/WEB-INF/views/common/search_realestate.jsp" %>
 	</div>
 <div class="row">
 	<div class="col-md-4">
@@ -297,6 +137,7 @@ var drawGrid = function(obj) {
     		<div id="map" class="col-md-7" style="width:100%;height: 100%"></div>
 		</div>
 	</div>
+	<!-- 
 	<div class="col-md-12">
 		<h6>Một số bất động sản lân cận</h6>
 		<div class="col-md-12">
@@ -307,7 +148,29 @@ var drawGrid = function(obj) {
 			<div id="jsGrid"></div>
 		</div>
 	</div>
+	 -->
+	 <div class="col-md-12">
+	 	<h6>Share/message on Facebook/Twiter</h6>
+		<h6>Review By Stars</h6>
+		
+		<h6>Review will be here</h6>
+		<div class="col-md-12">
+			avatar, comment, date, reply ...
+		</div>
+	</div>
 </div>
+
+	<script type="text/javascript">
+		var lat = "${latitude}";
+		var lng = "${longitude}";
+		var	baseLat = "${baseLat}";
+		var baseLng = "${baseLng}";
+	 	var type = "${type}";
+	 	var price = "${price}";
+	 	var numBed = "${numBed}";
+	</script>
+
+	<script type="text/javascript" src="${ctx}/resources/js/webapp/news/property.js"></script>
 	<script
 		src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyCcDHHuK_bGlftUhpq-MWo72JwD0-PYrv8&v=3&callback=initMap">
 	</script>
