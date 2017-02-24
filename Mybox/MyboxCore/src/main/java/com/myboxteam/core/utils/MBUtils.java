@@ -363,6 +363,9 @@ public class MBUtils {
 		for (ParseObject parseObject : data) {
 			Map<String, Object> map = parseObject.getData();
 			map.put("objectId", parseObject.getObjectId());
+			map.put("createdAt", parseObject.getCreatedAt());
+			map.put("createdAtLabel", DDhpMM_YYYY_DATE_FORMAT.format(parseObject.getCreatedAt()));
+			map.put("objectId", parseObject.getObjectId());
 			list.add(map);
 		}
 

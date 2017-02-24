@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import org.springframework.context.MessageSource;
 
-
 public class BaseException extends RuntimeException {
 
 	private static final long serialVersionUID = -7030732749416640448L;
@@ -80,16 +79,18 @@ public class BaseException extends RuntimeException {
 		restError.setErrorCode(errorCode.getErrorCode());
 		restError.setMessage(messageSource.getMessage(
 				errorCode.getMessageCode(), null, locale));
+		
+		if (fieldErrors != null) {
+			for (FieldError fieldError : fieldErrors) {
+				Object[] args = fieldError.getErrorMessageArgs();
+				String messageCode = fieldError.getErrorMessage();
 
-		for (FieldError fieldError : fieldErrors) {
-			Object[] args = fieldError.getErrorMessageArgs();
-			String messageCode = fieldError.getErrorMessage();
+				messageCode = messageCode.replace("{", "").replace("}", "");
 
-			messageCode = messageCode.replace("{", "").replace("}", "");
-
-			String message = messageSource
-					.getMessage(messageCode, args, locale);
-			fieldError.setErrorMessage(message);
+				String message = messageSource.getMessage(messageCode, args,
+						locale);
+				fieldError.setErrorMessage(message);
+			}
 		}
 		restError.setFieldErrors(fieldErrors);
 		return restError;

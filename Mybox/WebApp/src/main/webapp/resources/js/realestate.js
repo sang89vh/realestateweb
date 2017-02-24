@@ -22,7 +22,9 @@ $(document).ajaxError(function(event, jqxhr, settings, exception) {
 		var cont = "";
 		
 	    if (jqxhr.status === 400) { 
-	
+	    	//hidden confirm message
+			//swal.close();
+			
 			var restError = JSON.parse(jqxhr.responseText);
 			
 			console.log(restError);
@@ -36,8 +38,7 @@ $(document).ajaxError(function(event, jqxhr, settings, exception) {
 			}else{
 				showBusinessError(restError);
 			}
-			//hidden confirm message
-			swal.close()
+			
 			return;
 			
 	    } else if (jqxhr.status === 0) {
@@ -91,7 +92,29 @@ $.fn.serializeObject = function()
 //var homePage ="/mybox/"
 //GG Map
 
+var bindingForm = function(formId, data) {
+	console.log('bindingForm');
+	console.log(formId);
+	console.log(data);
 
+	$('#' + formId + ' input, #' + formId + ' select, #' + formId + ' textarea').each(
+			function(i, val) {
+				var inpName = $(this).attr('name');
+				if (inpName != null && inpName != undefined) {
+					var key = inpName.split('.').pop();
+					if ($(this).attr('type') == 'radio') {
+						if ($(this).val() == data[key]) {
+							$(
+									'input[name="' + $(this).attr('name')
+											+ '"][value="' + data[key] + '"]')
+									.prop('checked', true);
+						}
+					} else {
+						$(this).val(data[key]);
+					}
+				}
+			});
+}
 
 
 var submitForm = function(btn){
@@ -125,6 +148,9 @@ function hiddeFormError(formId) {
 	});
 
 }
+function showBusinessError(restError){
+	sweetAlert("Oops...", restError.message, "error");
+}
 function showFormError(restError, formId) {
 
 	hiddeFormError(formId);
@@ -144,7 +170,6 @@ var saveForm = function($myForm,callback){
 		
 		// Find disabled inputs, and remove the "disabled" attribute
 		var disabled = $myForm.find(':input:disabled').removeAttr('disabled');
-		$("#imageIds").val(paths.toString());
 		var formData = $myForm.serialize();
 		
 		// re-disabled the set of inputs that you previously enabled

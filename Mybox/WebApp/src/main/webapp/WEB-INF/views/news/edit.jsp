@@ -8,7 +8,7 @@
 </style>
 <div class="row">
 	<div class="col-md-12" id="form-create"  style="margin-top: 10px">
-				<form  id="form-create-news" action="${ctx}/member/create-news" method="post" data-action="saveForm" data-callback="saveNewsCallback">
+				<form  id="form-create-news" action="${ctx}/member/edit-news/${objectId}" method="post" data-action="saveForm" data-callback="saveNewsCallback">
 					<div class="col-md-12" style="background-color: #474e52; color: white;margin-bottom: 10px;">
 						<div class="col-md-6">
 							<h6>Thông tin nhà đất</h6>
@@ -112,6 +112,10 @@
 	</div>
 </div>
 <script type="text/javascript">
+var nativeNews = JSON.parse('${newsJson}'); 
+console.log(nativeNews);
+
+
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
      	zoom: 15
@@ -130,19 +134,41 @@ var updateAdminInfo = function(specificAddress,adminAddress,note){
 }
 
 
-</script>
-
-<script type="text/javascript">
 var paths = [];
 //Disabling autoDiscover, otherwise Dropzone will try to attach twice.
 Dropzone.autoDiscover = false;
 // or disable for specific dropzone:
 // Dropzone.options.myDropzone = false;
 
-$(function() {
+var buildDropzone = function() {
   // Now that the DOM is fully loaded, create the dropzone, and setup the
   // event listeners
-  var myDropzone = new Dropzone("#my-dropzone", { url: ctx + "/member/uploadImages",addRemoveLinks:true});
+  var myDropzone = new Dropzone("#my-dropzone", { url: ctx + "/member/uploadImages",addRemoveLinks:true,
+												  init: function () {
+												        var myDropzone = this;
+											
+												        //Populate any existing thumbnails
+												        if (paths) {
+												            for (var i = 0; i < paths.length; i++) {
+												                var mockFile = { 
+												                    name: "myimage.jpg", 
+												                    size: 12345, 
+												                    type: 'image/jpeg', 
+												                    status: Dropzone.ADDED, 
+												                    url: '${SERVER_IMAGE}'+paths[i] 
+												                };
+											
+												                // Call the default addedfile event handler
+												                myDropzone.emit("addedfile", mockFile);
+											
+												                // And optionally show the thumbnail of the file:
+												                myDropzone.emit("thumbnail", mockFile, '${SERVER_IMAGE}'+paths[i]);
+											
+												                myDropzone.files.push(mockFile);
+												            }
+												        }  
+												  }
+											  });
   myDropzone.on("addedfile", function(file) {
     /* Maybe display some more file information on your page */
     console.log("adding file");
@@ -168,18 +194,35 @@ $(function() {
     paths.splice( paths.indexOf(file.path), 1 );
   });
   $("#my-dropzone").addClass("dropzone");
-})
+}
 var preSubmitForm = function(btn){
 	$("#imageIds").val(paths.toString());
 	submitForm(btn);
 }
 var saveNewsCallback = function(form,data){
 	console.log(data);
-	window.location.href=ctx+'/member/manage-news';
+	swal({
+		  title: "Edit news",
+		  text: "Your news is changed.",
+		  timer: 2000,
+		  showConfirmButton: false
+		});
+	//window.location.href=ctx+'/member/manage-news';
+	bindingForm('form-create-news',data);
+	
+	
 }
 
 
 $(document).ready(function(){
+	
+	bindingForm('form-create-news',nativeNews);
+	if(nativeNews.thumbs){
+		paths = nativeNews.thumbs.split(",");
+	}
+	
+	buildDropzone();
+	
 	$("#posOption2").change(function(){ 
         if( $(this).is(":checked") ){ 
             console.log($(this).val());
@@ -200,4 +243,3 @@ $(document).ready(function(){
 	<script
 		src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyCcDHHuK_bGlftUhpq-MWo72JwD0-PYrv8&v=3&callback=initMap">
 	</script>
-

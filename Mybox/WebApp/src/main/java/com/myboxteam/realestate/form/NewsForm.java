@@ -6,7 +6,9 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class NewsForm  extends BaseForm{
+import com.myboxteam.database.model.MBBaseModel;
+
+public class NewsForm  extends MBBaseModel{
 	/**
 	 * 
 	 */
@@ -15,6 +17,10 @@ public class NewsForm  extends BaseForm{
 	@NotBlank
 	@NotEmpty
 	private String title;
+	
+	@NotNull(message="validate.news.images")
+	@NotBlank(message="validate.news.images")
+	@NotEmpty(message="validate.news.images")
 	private String imageIds;
 	
 	@NotNull

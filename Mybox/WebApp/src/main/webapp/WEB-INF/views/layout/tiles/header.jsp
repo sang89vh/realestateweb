@@ -22,6 +22,7 @@
 <link   href="${ctx}/resources/css/amchart.css" rel="stylesheet" type="text/css"/>
 <link   href="${ctx}/resources/css/fullcalendar.min.css" rel="stylesheet" type="text/css"/>
 <link   href="${ctx}/resources/css/fullcalendar.print.css" rel='stylesheet' media='print' type="text/css"/>
+<link   href="${ctx}/resources/css/bootstrap-dialog.min.css" rel='stylesheet' media='print' type="text/css"/>
 <!-- Add fancyBox -->
 <link   href="${ctx}/resources/css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
 <!-- Optionally add helpers - button, thumbnail and/or media -->
@@ -56,4 +57,5 @@
 <script type="text/javascript" src="${ctx}/resources/js/realestate.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/realestate-map.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/markerclusterer.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/bootstrap-dialog.min.js"></script>
 

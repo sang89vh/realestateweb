@@ -18,7 +18,7 @@
 		<!-- if user doesn't logged -->
 		<form-login 
 		    login-page="/authen/login" 
-		    default-target-url="/" 
+		    default-target-url="/authen/login-success" 
 			authentication-failure-url="/authen/login?error" 
 			username-parameter="USER_NAME"
 			password-parameter="PASSWORD" />

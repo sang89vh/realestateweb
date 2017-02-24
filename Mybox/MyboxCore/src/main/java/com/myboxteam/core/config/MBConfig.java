@@ -18,5 +18,11 @@ public class MBConfig implements MBCommCode {
 	public void setPathImage(String path) {
 		PATH_IMAGE = path;
 	}
+	
+	public static String SERVER_IMAGE;
+	@Value("${server.image}")
+	public void setServerImage(String path) {
+		SERVER_IMAGE = path;
+	}
 
 }

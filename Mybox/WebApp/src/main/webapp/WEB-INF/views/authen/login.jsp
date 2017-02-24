@@ -1,43 +1,42 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/layout/taglib.jsp"%>
 <link  href="${ctx}/resources/css/mb0001/mb000101.css" rel="stylesheet" type="text/css" />
-
 	<div class="div-login-container">
-
-		
-
-		<form name='loginForm' id="form-signup" class="form-signup"
-			action="<c:url value='/login' />" method='POST'>
+		<form name='loginForm' id="form-signup" class="form-signup" action="<c:url value='/login' />" method='POST'>
 			<div >
 				<c:if test="${not empty error}">
-					<div class="error" style="text-align: center;">${error}</div>
+					<script type="text/javascript">
+						sweetAlert("Oops...", "${error}", "error");
+					</script>
 				</c:if>
 				<c:if test="${not empty msg}">
-					<div class="msg" style="text-align: center;">${msg}</div>
+					<script type="text/javascript">
+						sweetAlert("${msg}");
+					</script>
 				</c:if>
 			</div>
-			<h5 class="form-signup-heading text-center">Đăng nhập Webtimnha.com</h5>
-			<label for="inputEmail" class="sr-only">Địa chỉ email</label> 
+			<h5 class="form-signup-heading text-center"><spring:message code="page.login.header"/></h5>
+			<label for="USER_NAME" class="sr-only"><spring:message code="account.username"/></label> 
 			<input style="margin-top: 10px;" type='text' 
 				   name='USER_NAME' 
 				   id='USER_NAME' 
 				   class='form-control'
-				   placeholder="Địa chỉ email" 
+				   placeholder="<spring:message code="account.username"/>" 
 				   required 
 				   autofocus />
 				
-			<label for="inputPassword" class="sr-only">Mật khẩu</label> 
+			<label for="PASSWORD" class="sr-only"><spring:message code="account.password"/></label> 
 			<input style="margin-top: 10px;" type='PASSWORD' 
 				   name='PASSWORD'
-				   id="inputPassword"
-				   placeholder="Mật khẩu" 
+				   id="PASSWORD"
+				   placeholder="<spring:message code="account.password"/>" 
 				   required 
 				   class="form-control"
 				   />
 			<input type="hidden" name="${_csrf.parameterName}"
 				value="${_csrf.token}" />
 			
-			<button id="btn-signup-submit" 	data-loading-text="Loading..." class="btn btn-lg btn-primary btn-block" type="submit" style="margin-top: 10px;">Đăng nhập</button>
-
+			<button id="btn-signup-submit" 	data-loading-text="Loading..." class="btn btn-lg btn-primary btn-block" type="submit" style="margin-top: 10px;"><spring:message code="menu.login"/></button>
+			<a class='btn btn-lg btn-info btn-block' href="<c:url value='/authen/signup' />" style="margin-top: 10px;"><spring:message code="menu.signup"/></a>
 		</form>
 	</div>
