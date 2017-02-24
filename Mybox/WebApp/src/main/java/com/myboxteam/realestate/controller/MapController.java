@@ -35,7 +35,7 @@ public class MapController extends MBBaseController {
 		ParseGeoPoint southwestOfSF = new ParseGeoPoint(geoBox.getSouthwestLatitude(), geoBox.getSouthwestLongitude());
 		ParseGeoPoint northeastOfSF = new ParseGeoPoint(geoBox.getNortheastLatitude(), geoBox.getNortheastLongitude());
 		query.whereWithinGeoBox("location", southwestOfSF, northeastOfSF);
-		query.skip(skip);
+		//query.skip(skip);
 		query.limit(50);
 		List<ParseObject> places = query.find();
 		System.out.println("======skip=======");

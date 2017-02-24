@@ -22,7 +22,7 @@ var findCurrentPos = function(isDraggable,adminLevel){
 	    //findPosAdminInfo(currentPos.lat,currentPos.lng,map,polygons,adminLevel);
       }, function() {
         handleLocationError(true, map.getCenter());
-      });
+      },{timeout:10000});
     } else {
       // Browser doesn't support Geolocation
     handleLocationError(false, map.getCenter());

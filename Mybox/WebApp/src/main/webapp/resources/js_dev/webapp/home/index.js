@@ -61,7 +61,7 @@
 
 		var locations = [];
 		$.ajax({ 
-			url: ctx + '/map/search-place?skip=50' , 
+			url: ctx + '/map/search-place?skip=0' , 
 			//type: 'post', 
 			data: bound,
 			cache:false,
