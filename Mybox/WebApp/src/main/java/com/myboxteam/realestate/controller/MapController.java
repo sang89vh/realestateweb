@@ -8,6 +8,7 @@ import org.parse4j.ParseGeoPoint;
 import org.parse4j.ParseObject;
 import org.parse4j.ParseQuery;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +36,23 @@ public class MapController extends MBBaseController {
 		ParseGeoPoint southwestOfSF = new ParseGeoPoint(geoBox.getSouthwestLatitude(), geoBox.getSouthwestLongitude());
 		ParseGeoPoint northeastOfSF = new ParseGeoPoint(geoBox.getNortheastLatitude(), geoBox.getNortheastLongitude());
 		query.whereWithinGeoBox("location", southwestOfSF, northeastOfSF);
+		
+		if(geoBox.getFromPrice() != null && geoBox.getFromPrice() !=0L){
+			query.whereGreaterThanOrEqualTo("price", geoBox.getFromPrice());
+		}
+		
+		if(geoBox.getToPrice() != null && geoBox.getToPrice() !=0L){
+			query.whereLessThanOrEqualTo("price", geoBox.getToPrice());
+		}
+		
+		if(geoBox.getNumBed() != null && geoBox.getNumBed() != 0){
+			query.whereLessThanOrEqualTo("numBed", geoBox.getNumBed());
+		}
+		
+		if(!StringUtils.isEmpty(geoBox.getType())){
+			query.whereEqualTo("type", geoBox.getType());
+		}
+		
 		query.skip(skip);
 		query.limit(50);
 		List<ParseObject> places = query.find();

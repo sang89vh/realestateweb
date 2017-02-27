@@ -46,20 +46,22 @@ public class NewsController extends MBBaseController {
 	@RequestMapping("/property")
 	public ModelAndView property(ModelAndView mav, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		
+
 		String objId = request.getParameter("obj");
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("ReNews");
-//		ParseQuery<ParseObject> query = ParseQuery.getQuery("RePlace");
+		// ParseQuery<ParseObject> query = ParseQuery.getQuery("ReNews");
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("RePlace");
 		ParseObject news = query.get(objId);
-		
-		Map<String,Object> data=news.getData();	
-		Object formDate =data.get("fromDate");
-		if(data !=null && !StringUtils.isEmpty(formDate)){
-			String fdstr =MBUtils.convertDateToPrettyTime(formDate);
-			data.put("fromDateLabel",fdstr);
+
+		Map<String, Object> data = news.getData();
+		Object formDate = data.get("fromDate");
+		if (data != null && !StringUtils.isEmpty(formDate)) {
+			String fdstr = MBUtils.convertDateToPrettyTime(formDate);
+			data.put("fromDateLabel", fdstr);
 
 		}
-
+		System.out.println("==========================================");
+		System.out.println(data.get("title").toString());
+		System.out.println("==========================================");
 		mav.addObject("news", data);
 
 		// search near by
@@ -67,25 +69,22 @@ public class NewsController extends MBBaseController {
 
 		JSONArray placeNearHere = MapUtils.searchPlaceNear(lo);
 
-		mav.addObject("placeNearHere",placeNearHere);
-		
-		mav.addObject("latitude",lo.getLatitude());
-		mav.addObject("longitude",lo.getLongitude());
-		
-		mav.addObject("baseLat",request.getParameter("lat"));
-		mav.addObject("baseLng",request.getParameter("lng"));
-		
+		mav.addObject("placeNearHere", placeNearHere);
+
+		mav.addObject("latitude", lo.getLatitude());
+		mav.addObject("longitude", lo.getLongitude());
+
+		mav.addObject("baseLat", request.getParameter("lat"));
+		mav.addObject("baseLng", request.getParameter("lng"));
 
 		mav.addObject("search", request.getParameter("search"));
 
-		mav.addObject("type",request.getParameter("type"));
-		mav.addObject("price",request.getParameter("price"));
-		mav.addObject("numBed",request.getParameter("numBed"));
+		mav.addObject("type", request.getParameter("type"));
+		mav.addObject("price", request.getParameter("price"));
+		mav.addObject("numBed", request.getParameter("numBed"));
 
 		mav.setViewName("news/property");
 		return mav;
 	}
-
-	
 
 }

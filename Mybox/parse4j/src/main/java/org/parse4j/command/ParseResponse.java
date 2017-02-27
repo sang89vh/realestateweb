@@ -1,10 +1,11 @@
 package org.parse4j.command;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parse4j.ParseException;
@@ -12,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ParseResponse {
-	
+
 	private static Logger LOGGER = LoggerFactory.getLogger(ParseResponse.class);
 
 	private HttpResponse httpResponse;
@@ -27,10 +28,10 @@ public class ParseResponse {
 		this.responseBody = getResponseAsString(httpResponse);
 		this.contentLength = responseBody.length();
 		this.headers = httpResponse.toString();
-		if(LOGGER.isDebugEnabled()) {
+		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Response Headers: " + headers);
 			LOGGER.debug("Response Content Length: " + contentLength);
-			LOGGER.debug("Response Content: " + responseBody);	
+			LOGGER.debug("Response Content: " + responseBody);
 		}
 	}
 
@@ -55,7 +56,7 @@ public class ParseResponse {
 	static ParseException getConnectionFailedException(Throwable e) {
 		return getConnectionFailedException(e.getMessage());
 	}
-	
+
 	public ParseException getException() {
 
 		if (hasConnectionFailed()) {
@@ -74,69 +75,83 @@ public class ParseResponse {
 			return new ParseException(ParseException.INVALID_JSON,
 					"Invalid response from Parse servers.");
 		}
-		
+
 		return getParseError(response);
 	}
-	
+
 	public JSONObject getJsonObject() {
-		
+
 		return new JSONObject(responseBody);
 		/*
-		try {
-			
-			JSONObject json = new JSONObject(EntityUtils.toString(httpResponse.getEntity()));
-			
-			
-			return json;
-		} catch (org.apache.http.ParseException e) {
-			return null;
-		} catch (JSONException e) {
-			return null;
-		} catch (IOException e) {
-			return null;
-		}
-		*/
+		 * try {
+		 * 
+		 * JSONObject json = new
+		 * JSONObject(EntityUtils.toString(httpResponse.getEntity()));
+		 * 
+		 * 
+		 * return json; } catch (org.apache.http.ParseException e) { return
+		 * null; } catch (JSONException e) { return null; } catch (IOException
+		 * e) { return null; }
+		 */
 	}
-	public String getRawResponseBody(){
+
+	public String getRawResponseBody() {
 		return responseBody;
 	}
+
 	private ParseException getParseError(JSONObject response) {
-		
+
 		int code;
 		String error;
-		
+
 		try {
 			code = response.getInt(RESPONSE_CODE_JSON_KEY);
-		}
-		catch(JSONException e) {
+		} catch (JSONException e) {
 			code = ParseException.NOT_INITIALIZED;
 		}
-		
+
 		try {
 			error = response.getString(RESPONSE_ERROR_JSON_KEY);
-		}
-		catch(JSONException e) {
+		} catch (JSONException e) {
 			error = "Error undefinted by Parse server.";
 		}
-		
+
 		return new ParseException(code, error);
 	}
-	
+
 	private String getResponseAsString(HttpResponse httpResponse) {
+		String jsonText=null;
 		try {
-			BufferedReader r = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
-			StringBuilder total = new StringBuilder();
-			String line = null;
-			while ((line = r.readLine()) != null) {
-			   total.append(line);
-			}
-			//r.close();
-			return total.toString();
-		}
-		catch(IOException e) {
+			HttpEntity entity = httpResponse.getEntity();
+			
+
+			jsonText = EntityUtils.toString(entity, HTTP.UTF_8);
+			
+		} catch (org.apache.http.ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			LOGGER.error("Error while reading response entity", e);
-			throw new IllegalArgumentException("Failed getting Parse Response", e);
+			// throw new
+			// IllegalArgumentException("Failed getting Parse Response", e);
 		}
+		return jsonText;
+		// try {
+		// BufferedReader r = new BufferedReader(new
+		// InputStreamReader(httpResponse.getEntity().getContent()));
+		// StringBuilder total = new StringBuilder();
+		// String line = null;
+		// while ((line = r.readLine()) != null) {
+		// total.append(line);
+		// }
+		// //r.close();
+		// return total.toString();
+		// }
+		// catch(IOException e) {
+		// LOGGER.error("Error while reading response entity", e);
+		// throw new IllegalArgumentException("Failed getting Parse Response",
+		// e);
+		// }
 	}
 
 }

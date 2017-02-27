@@ -37,6 +37,6 @@ var saveSignupCallback = function(form,data){
 				value="${_csrf.token}" />
 			
 			<button id="btn-signup-submit" 	data-loading-text="Loading..." onclick="submitForm(this)" class="btn btn-lg btn-primary btn-block" type="button" style="margin-top: 10px;"><spring:message code="menu.signup"/></button>
-			<a class='btn btn-lg btn-info btn-block' href="<c:url value='/authen/login?logout' />" style="margin-top: 10px;"><spring:message code="menu.login"/></a>
+			<a  href="<c:url value='/authen/login?logout' />" style="margin-top: 10px;"><spring:message code="menu.login"/></a>
 		</form>
 	</div>

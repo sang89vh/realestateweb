@@ -7,11 +7,9 @@ public class GeoBox {
 	private double northeastLongitude;
 	
 	private String type;
-	//private String price;
-	private String numBed;
-	private String fromPrice;
-	
-	private String toPrice;
+	private Integer numBed;
+	private Long fromPrice;
+	private Long toPrice;
 	
 	public double getSouthwestLatitude() {
 		return southwestLatitude;
@@ -43,29 +41,23 @@ public class GeoBox {
 	public void setType(String newType) {
 		this.type = newType;
 	}
-//	public String getPrice() {
-//		return price;
-//	}
-//	public void setPrice(String price) {
-//		this.price = price;
-//	}
-	public String getNumBed() {
+	public Integer getNumBed() {
 		return numBed;
 	}
-	public void setNumBed(String beds) {
-		this.numBed = beds;
+	public void setNumBed(Integer numBed) {
+		this.numBed = numBed;
 	}
-	
-	public String getFromPrice() {
+	public Long getFromPrice() {
 		return fromPrice;
 	}
-	public void setFromPrice(String fromPrice) {
+	public void setFromPrice(Long fromPrice) {
 		this.fromPrice = fromPrice;
 	}
-	public String getToPrice() {
+	public Long getToPrice() {
 		return toPrice;
 	}
-	public void setToPrice(String toPrice) {
+	public void setToPrice(Long toPrice) {
 		this.toPrice = toPrice;
 	}
+
 }

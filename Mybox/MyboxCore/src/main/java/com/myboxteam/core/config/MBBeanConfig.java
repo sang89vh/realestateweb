@@ -1,11 +1,12 @@
 package com.myboxteam.core.config;
 
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import org.parse4j.Parse;
-import org.parse4j.util.ParseRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.StringHttpMessageConverter;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,5 +38,10 @@ public class MBBeanConfig {
 		
 		 Parse.initialize(MBConfig.APP_ID, MBConfig.APP_REST_API_ID, MBConfig.CUSTOM_SERVER_PATH);
 		 return Parse.getApplicationId();
+	}
+	
+	@Bean
+	public StringHttpMessageConverter stringHttpMessageConverter() {
+	    return new StringHttpMessageConverter(Charset.forName("UTF-8"));
 	}
 }
