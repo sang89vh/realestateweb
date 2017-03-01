@@ -4,11 +4,11 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>
 			/WEB-INF/spring/appServlet/servlet-context.xml,
-			/WEB-INF/spring/spring-database.xml,
+<!-- 			/WEB-INF/spring/spring-database.xml, -->
 			/WEB-INF/spring/spring-security.xml,
 			/WEB-INF/spring/spring-tiles.xml,
 			/WEB-INF/spring/spring-exception.xml,
-			/WEB-INF/spring/spring-quartz.xml,
+<!-- 			/WEB-INF/spring/spring-quartz.xml, -->
 		</param-value>
   </context-param>
   <listener>

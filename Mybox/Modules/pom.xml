@@ -15,12 +15,12 @@
 			</plugin>
 		</plugins>
 	</build>
-	<parent>
-		<groupId>com.myboxteam</groupId>
-		<artifactId>Mybox</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>Mybox/pom.xml</relativePath>
-	</parent>
+<!-- 	<parent> -->
+<!-- 		<groupId>com.myboxteam</groupId> -->
+<!-- 		<artifactId>Mybox</artifactId> -->
+<!-- 		<version>0.0.1-SNAPSHOT</version> -->
+<!-- 		<relativePath>Mybox/pom.xml</relativePath> -->
+<!-- 	</parent> -->
 	<modules>
 		<module>System</module>
 <!-- 		<module>RealEstateWeb</module> -->

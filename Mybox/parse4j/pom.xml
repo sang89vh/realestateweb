@@ -8,12 +8,12 @@
 	<name>parse4j</name>
 	<url>https://github.com/thiagolocatelli/parse4j</url>
 
-	<parent>
-		<groupId>com.myboxteam</groupId>
-		<artifactId>Mybox</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>Mybox/pom.xml</relativePath>
-	</parent>
+<!-- 	<parent> -->
+<!-- 		<groupId>com.myboxteam</groupId> -->
+<!-- 		<artifactId>Mybox</artifactId> -->
+<!-- 		<version>0.0.1-SNAPSHOT</version> -->
+<!-- 		<relativePath>Mybox/pom.xml</relativePath> -->
+<!-- 	</parent> -->
 
 	<licenses>
 		<license>
@@ -46,7 +46,7 @@
 		<maven.test.skip>true</maven.test.skip>
 		<maven.test.failure.ignore>false</maven.test.failure.ignore>
 		<maven.test.error.ignore>false</maven.test.error.ignore>
-		<java.version>1.6</java.version>
+		<java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>

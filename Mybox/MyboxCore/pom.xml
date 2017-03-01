@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>MyboxCore</artifactId>
-	<parent>
-		<groupId>com.myboxteam</groupId>
-		<artifactId>Mybox</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>Mybox/pom.xml</relativePath>
-	</parent>
+<!-- 	<parent> -->
+<!-- 		<groupId>com.myboxteam</groupId> -->
+<!-- 		<artifactId>Mybox</artifactId> -->
+<!-- 		<version>0.0.1-SNAPSHOT</version> -->
+<!-- 		<relativePath>Mybox/pom.xml</relativePath> -->
+<!-- 	</parent> -->
 	<groupId>com.myboxteam</groupId>
 	<version>0.0.1-SNAPSHOT</version>
 
@@ -44,25 +44,25 @@
 			<artifactId>parse4j</artifactId>
 			<version>1.5-SNAPSHOT</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
-		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis</artifactId>
-			<version>3.4.1</version>
-		</dependency>
+<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.mybatis</groupId> -->
+<!-- 			<artifactId>mybatis</artifactId> -->
+<!-- 			<version>3.4.1</version> -->
+<!-- 		</dependency> -->
 
-		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
-		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis-spring</artifactId>
-			<version>1.3.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
+<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring --> 
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.mybatis</groupId> -->
+<!-- 			<artifactId>mybatis-spring</artifactId> -->
+<!-- 			<version>1.3.0</version> -->
+<!-- 		</dependency> -->
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc --> 
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework</groupId> -->
+<!-- 			<artifactId>spring-jdbc</artifactId> -->
+<!-- 			<version>${org.springframework-version}</version> -->
+<!-- 		</dependency> -->
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-aspects -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -118,24 +118,24 @@
 		<!-- <version>6.0.5</version> -->
 		<!-- </dependency> -->
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.40</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>mysql</groupId> -->
+<!-- 			<artifactId>mysql-connector-java</artifactId> -->
+<!-- 			<version>5.1.40</version> -->
+<!-- 		</dependency> -->
 
 
-		<dependency>
-			<groupId>org.bgee.log4jdbc-log4j2</groupId>
-			<artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
-			<version>1.16</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
-		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.bgee.log4jdbc-log4j2</groupId> -->
+<!-- 			<artifactId>log4jdbc-log4j2-jdbc4.1</artifactId> -->
+<!-- 			<version>1.16</version> -->
+<!-- 		</dependency> -->
+ 		<!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp --> 
+<!-- 		<dependency> -->
+<!-- 			<groupId>commons-dbcp</groupId> -->
+<!-- 			<artifactId>commons-dbcp</artifactId> -->
+<!-- 			<version>1.4</version> -->
+<!-- 		</dependency> -->
 
 
 		<!-- Logging -->
@@ -390,7 +390,6 @@
 		</developer>
 	</developers>
 	<build>
-		<finalName>FDemo</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>

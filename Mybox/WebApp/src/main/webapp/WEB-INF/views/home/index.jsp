@@ -7,7 +7,7 @@
         height: 100%;
       }
     </style>
-	<div class="col-md-12">
+	<div class="row">
 		<%@ include file="/WEB-INF/views/common/search_realestate.jsp" %>
 	</div>
 	<div class="row" >

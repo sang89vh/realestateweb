@@ -8,7 +8,6 @@
 		<property name="defaultErrorView" value="exception/exception"/>
 		<property name="exceptionMappings">
 			<props>
-				<prop key="java.sql.SQLException">exception/sql</prop> 
 				<prop key="java.lang.Exception">exception/exception</prop>
 			</props>
 		</property>
