@@ -1,13 +1,7 @@
 package com.myboxteam.realestate.controller;
 
-import java.util.Arrays;
+import java.util.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -220,22 +214,20 @@ public class MemberController extends MBBaseController{
 		ParseObject news = query.get(objId);
 
 		List comments;
-		int maxCommentId = 0;
 		if (news.get("comments") != null){
 			comments = (ArrayList) news.get("comments");
-			maxCommentId = (int) news.get("maxCommentId");
 		} else {
 			comments = new ArrayList();
 		}
 
+		String uniqueID = UUID.randomUUID().toString();
+
 		Map commentData = comment.getData();
-		maxCommentId++;
-		commentData.put("id",maxCommentId);
+		commentData.put("id",uniqueID);
 		commentData.values().removeIf(Objects::isNull);
 
 		comments.add(commentData);
 		news.put("comments", comments);
-		news.put("maxCommentId", maxCommentId);
 		news.save();
 		return comment.getData();
 	}
@@ -251,10 +243,8 @@ public class MemberController extends MBBaseController{
 		ParseObject news = query.get(objId);
 
 		List comments;
-		int maxCommentId = 0;
 		if (news.get("comments") != null){
 			comments = (ArrayList) news.get("comments");
-			maxCommentId = (int) news.get("maxCommentId");
 		} else {
 			comments = new ArrayList();
 		}
@@ -262,13 +252,12 @@ public class MemberController extends MBBaseController{
 		commentWithFile.setObjId(null);
 		Map commentData = objectMapper.convertValue(commentWithFile, Map.class);
 
-		maxCommentId++;
-		commentData.put("id",maxCommentId);
+		String uniqueID = UUID.randomUUID().toString();
+		commentData.put("id",uniqueID);
 		commentData.values().removeIf(Objects::isNull);
 
 		comments.add(commentData);
 		news.put("comments", comments);
-		news.put("maxCommentId", maxCommentId);
 		news.save();
 
 		return commentData;
