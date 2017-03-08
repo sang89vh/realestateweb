@@ -62,6 +62,8 @@ public class NewsController extends MBBaseController {
 		System.out.println("==========================================");
 		System.out.println(data.get("title").toString());
 		System.out.println("==========================================");
+
+		mav.addObject("objId", objId);
 		mav.addObject("news", data);
 
 		// search near by
@@ -83,6 +85,8 @@ public class NewsController extends MBBaseController {
 		mav.addObject("price", request.getParameter("price"));
 		mav.addObject("numBed", request.getParameter("numBed"));
 
+		mav.addObject("comments",  objectMapper.writeValueAsString(data.get("comments")) );
+		mav.setViewName("news/property");
 		mav.setViewName("news/property");
 		return mav;
 	}

@@ -1,5 +1,6 @@
 package com.myboxteam.core.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.ocpsoft.prettytime.PrettyTime;
@@ -15,5 +16,6 @@ public class MBBaseController {
 	@Autowired
 	protected PrettyTime prettyTime;
 	
-	
+	@Autowired
+	protected ObjectMapper objectMapper;
 }

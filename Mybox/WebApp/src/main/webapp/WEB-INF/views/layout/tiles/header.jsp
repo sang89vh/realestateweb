@@ -33,6 +33,9 @@
 <link  href="${ctx}/resources/css/dropzone.css" rel="stylesheet" type="text/css" />
 <link  href="${ctx}/resources/css/realestate.css" rel="stylesheet" type="text/css" />
 
+<link  href="${ctx}/resources/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link  href="${ctx}/resources/css/jquery-comments.css" rel="stylesheet" type="text/css" />
+
 <script type="text/javascript" src="${ctx}/resources/js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/tether.min.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/pace.min.js"></script>
@@ -58,4 +61,7 @@
 <script type="text/javascript" src="${ctx}/resources/js/realestate-map.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/markerclusterer.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/bootstrap-dialog.min.js"></script>
+
+<script type="text/javascript" src="${ctx}/resources/js/jquery-comments.min.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/jquery.textcomplete.js"></script>
 
