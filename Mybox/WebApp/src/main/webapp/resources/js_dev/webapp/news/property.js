@@ -120,3 +120,134 @@ var drawGrid = function(obj) {
 					});
 
 };
+
+
+//for comment
+$(function() {
+
+    var generateComment = function(data){
+        $(data.pings).each(function(index, id) {
+            var user = usersArray.filter(function(user){return user.id == id})[0];
+            data.content = data.content.replace('@' + id, '@' + user.fullname);
+        });
+        //submit data
+
+        var comment = {
+            objId: objId,
+            data: data
+        }
+        return comment;
+    };
+    var addComment = function (data){
+        var comment = generateComment(data);
+        $.ajax({
+            url: ctx + "/member/add-comment",
+            data: JSON.stringify(comment),
+            type: "POST",
+
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-Type", "application/json");
+            },
+            success: function(newsData) {
+                console.log(newsData);
+            }
+        });
+
+        return data;
+    };
+
+    var editComment = function (data){
+        var comment = generateComment(data);
+        $.ajax({
+            url: ctx + "/member/edit-comment",
+            data: JSON.stringify(comment),
+            type: "PUT",
+
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-Type", "application/json");
+            },
+            success: function(newsData) {
+                console.log(newsData);
+            }
+        });
+
+        return data;
+    };
+
+    var deleteComment = function(data){
+        var comment = generateComment(data);
+        $.ajax({
+            url: ctx + "/member/delete-comment",
+            data: JSON.stringify(comment),
+            type: "DELETE",
+
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-Type", "application/json");
+            },
+            success: function(newsData) {
+                console.log(newsData);
+            }
+        });
+    }
+
+    var uploadAttachementComment = function(dataArray){
+        var comment;
+        $(dataArray).each(function(index, commentJSON) {
+            var formData = new FormData();
+            formData.append("objId",objId);
+            $(Object.keys(commentJSON)).each(function(index, key) {
+                var value = commentJSON[key];
+                if(value) formData.append(key, value);
+            });
+            $.ajax({
+                url: ctx + '/member/add-comment-with-file',
+                type: 'POST',
+                data: formData,
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType:false,
+                success: function(commentJSON) {
+                    console.log(commentJSON);
+                },
+                error: function(data) {
+                    console.log(data);
+                },
+            });
+        });
+        return dataArray;
+    };
+
+    $('#comments-container').comments({
+        profilePictureURL: 'https://viima-app.s3.amazonaws.com/media/user_profiles/user-icon.png',
+        currentUserId: userId,
+        roundProfilePictures: true,
+        textareaRows: 1,
+        enableAttachments: true,
+        enableHashtags: true,
+        enablePinging: true,
+        getUsers: function(success, error) {
+            success(usersArray);
+        },
+        getComments: function(success, error) {
+            success(commentsArray);
+        },
+        postComment: function(data, success, error) {
+            success(addComment(data));
+        },
+        putComment: function(data, success, error) {
+            success(editComment(data));
+        },
+        deleteComment: function(data, success, error) {
+            success(deleteComment(data));
+        },
+        upvoteComment: function(data, success, error) {
+            success(editComment(data));
+        },
+        uploadAttachments: function(dataArray, success, error) {
+            success(uploadAttachementComment(dataArray));
+        },
+    });
+});

@@ -32,6 +32,13 @@
 					<outputDirectory>E:\2_Ebook\apache-tomcat-8.0.36\webapps\</outputDirectory>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

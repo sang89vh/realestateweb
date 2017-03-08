@@ -152,18 +152,9 @@
 	 <div class="col-md-12">
 	 	<h6>Share/message on Facebook/Twiter</h6>
 		<h6>Review By Stars</h6>
-		
+		 ${objId}
 		<h6>Review will be here</h6>
-		<div class="col-md-12">
-		
-			<form  id="form-create-review" action="${ctx}/review/create" method="post" data-action="saveForm" data-callback="saveNewsCallback">
-				<input type="hidden" name="objId" value="${news.objId}"></input>
-				<textarea name="comment" placeholder="Leave a comment..." id="comment" class="form-control"></textarea>
-				<br/>
-				<button type="button" class="btn btn-primary col-md-2 pull-right" onclick="submitForm(this)">Post</button>
-			</form>
-			
-		</div>
+		<div id="comments-container"></div>
 	</div>
 </div>
 
@@ -175,16 +166,27 @@
 	 	var type = "${type}";
 	 	var price = "${price}";
 	 	var numBed = "${numBed}";
+	 	var objId = "${objId}";
+	 	var userId = "1";
+
+		 var usersArray = [
+		 {
+		 id: 6,
+		 fullname: "Simon Powell",
+		 email: "simon.powell@viima.com",
+		 profile_picture_url: "https://app.viima.com/static/media/user_profiles/user-icon.png"
+		 }
+		 ];
+
+
+        var commentsArray = ${comments};
+        if (commentsArray === null){
+            commentsArray = [];
+        }
 	</script>
 
-	<script type="text/javascript" src="${ctx}/resources/js/webapp/news/property.js"></script>
-	
-	<script type="text/javascript">
-		var saveNewsCallback = function(data){
-			console.log('Submit review callback');
-			console.log(data);
-		}
-	</script>
+	<script type="text/javascript" src="${ctx}/resources/js_dev/webapp/news/property.js"></script>
+
 	<script
 		src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyCcDHHuK_bGlftUhpq-MWo72JwD0-PYrv8&v=3&callback=initMap">
 	</script>

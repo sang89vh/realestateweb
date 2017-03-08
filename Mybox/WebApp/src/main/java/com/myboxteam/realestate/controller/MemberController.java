@@ -1,13 +1,21 @@
 package com.myboxteam.realestate.controller;
 
 import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.myboxteam.core.controller.MBBaseController;
 import org.apache.commons.io.FilenameUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.parse4j.ParseException;
 import org.parse4j.ParseGeoPoint;
 import org.parse4j.ParseObject;
@@ -17,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,13 +37,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myboxteam.core.config.MBConfig;
 import com.myboxteam.core.utils.MBUtils;
+import com.myboxteam.realestate.form.Comment;
+import com.myboxteam.realestate.form.CommentWithFile;
 import com.myboxteam.realestate.form.NewsForm;
 import com.myboxteam.realestate.form.NewsQuery;
+
 
 @Controller
 @SessionAttributes("member")
 @RequestMapping("/member")
-public class MemberController {
+public class MemberController extends MBBaseController{
 	
 	@Autowired
 	private ObjectMapper mapper;
@@ -185,16 +197,9 @@ public class MemberController {
 	public @ResponseBody Map<String, Object> upload(
 			@RequestParam(value = "file", required = true) MultipartFile file)
 			throws ParseException {
-		String name = file.getOriginalFilename();
-		String ext = FilenameUtils.getExtension(name);
-		// generate output file
-		String output = MBUtils.generateFileName(ext);
-
-		// save file to storage
-		MBUtils.saveFile(output, file);
 
 		ParseObject image = new ParseObject("ReImages");
-		image.put("path", output);
+		image.put("path", saveMultipartFile(file));
 		image.save();
 
 		return image.getData();
@@ -204,5 +209,127 @@ public class MemberController {
 	@ModelAttribute(value="SERVER_IMAGE")
 	public String serverImage(){
 		return MBConfig.SERVER_IMAGE;
+	}
+
+	@RequestMapping(value = "/add-comment")
+	public @ResponseBody Map doAddComment(@RequestBody Comment comment)
+			throws Exception {
+
+		String objId = comment.getObjId();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("RePlace");
+		ParseObject news = query.get(objId);
+
+		List comments;
+		int maxCommentId = 0;
+		if (news.get("comments") != null){
+			comments = (ArrayList) news.get("comments");
+			maxCommentId = (int) news.get("maxCommentId");
+		} else {
+			comments = new ArrayList();
+		}
+
+		Map commentData = comment.getData();
+		maxCommentId++;
+		commentData.put("id",maxCommentId);
+		commentData.values().removeIf(Objects::isNull);
+
+		comments.add(commentData);
+		news.put("comments", comments);
+		news.put("maxCommentId", maxCommentId);
+		news.save();
+		return comment.getData();
+	}
+
+	@RequestMapping(value = "/add-comment-with-file")
+	public @ResponseBody Map doAddCommentWithFile(@ModelAttribute CommentWithFile commentWithFile)
+			throws Exception {
+
+		commentWithFile.setFile_url(serverImage() + "/" + saveMultipartFile(commentWithFile.getFile()));
+
+		String objId = commentWithFile.getObjId();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("RePlace");
+		ParseObject news = query.get(objId);
+
+		List comments;
+		int maxCommentId = 0;
+		if (news.get("comments") != null){
+			comments = (ArrayList) news.get("comments");
+			maxCommentId = (int) news.get("maxCommentId");
+		} else {
+			comments = new ArrayList();
+		}
+		commentWithFile.setFile(null);
+		commentWithFile.setObjId(null);
+		Map commentData = objectMapper.convertValue(commentWithFile, Map.class);
+
+		maxCommentId++;
+		commentData.put("id",maxCommentId);
+		commentData.values().removeIf(Objects::isNull);
+
+		comments.add(commentData);
+		news.put("comments", comments);
+		news.put("maxCommentId", maxCommentId);
+		news.save();
+
+		return commentData;
+	}
+
+	@RequestMapping(value = "/edit-comment")
+	public @ResponseBody Map doEditComment(@RequestBody Comment comment)
+			throws Exception {
+
+		String objId = comment.getObjId();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("RePlace");
+		ParseObject news = query.get(objId);
+
+		List comments = (ArrayList) news.get("comments");
+		for (Object commentData: comments ){
+			if (commentData instanceof Map){
+				Map commentMap = (Map) commentData;
+				if ((int) commentMap.get("id") == (int) comment.getData().get("id")){
+					commentMap.keySet().removeAll(comment.getData().keySet());
+					commentMap.putAll(comment.getData());
+					commentMap.values().removeIf(Objects::isNull);
+					break;
+				}
+			}
+		}
+		news.put("comments", comments);
+		news.save();
+		return comment.getData();
+	}
+
+	@RequestMapping(value = "/delete-comment")
+	public @ResponseBody Map doDeleteComment(@RequestBody Comment comment)
+			throws Exception {
+
+		String objId = comment.getObjId();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("RePlace");
+		ParseObject news = query.get(objId);
+
+		List comments = (ArrayList) news.get("comments");
+		for (Object commentData: comments ){
+			if (commentData instanceof Map){
+				Map commentMap = (Map) commentData;
+				if ((int) commentMap.get("id") == (int) comment.getData().get("id")){
+					comments.remove(commentData);
+					break;
+				}
+			}
+		}
+		news.put("comments", comments);
+		news.save();
+		return comment.getData();
+	}
+
+	private String saveMultipartFile(MultipartFile file){
+		String name = file.getOriginalFilename();
+		String ext = FilenameUtils.getExtension(name);
+		// generate output file
+		String output = MBUtils.generateFileName(ext);
+
+		// save file to storage
+		MBUtils.saveFile(output, file);
+		return output;
 	}
 }
