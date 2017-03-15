@@ -28,9 +28,11 @@
 			<span class="address"></span><br/>
 		</div>
 	</div>
-	
-    
-    <script type="text/javascript" src="${ctx}/resources/js/webapp/home/index.js"></script>    
+
+<%@ include file="/WEB-INF/views/common/select_location.jsp" %>
+
+
+    <script type="text/javascript" src="${ctx}/resources/js_dev/webapp/home/index.js"></script>
 
 	<script
 		src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyCcDHHuK_bGlftUhpq-MWo72JwD0-PYrv8&v=3&callback=initMap">

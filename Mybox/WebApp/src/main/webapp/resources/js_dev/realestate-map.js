@@ -21,18 +21,13 @@ var findCurrentPos = function(isDraggable,adminLevel){
 	    map.setCenter(currentPos);
 	    //findPosAdminInfo(currentPos.lat,currentPos.lng,map,polygons,adminLevel);
       }, function() {
-        handleLocationError(true, map.getCenter());
+          locationModalPopup();
       });
     } else {
       // Browser doesn't support Geolocation
-    handleLocationError(false, map.getCenter());
+        locationModalPopup();
     }
 };
-
-var handleLocationError = function(isBrowserSupport, mapCenter){
-	alert('location error');
-}
-
 
 var getPosAdminInfo = function(lat,lng,level,callBack){
 	var geocoder = new google.maps.Geocoder;
@@ -308,4 +303,34 @@ var changePrice=function(selectbox){
 }
 
 var changeNumBed=function(selectbox){	
+}
+
+function locationModalPopup(){
+    var modal = document.getElementById('locationModal');
+    var span = document.getElementById('closeLocationModal');
+    modal.style.display = "block";
+    $('input[name="locationRadios"]').change(function(){
+        var url;
+        if($('#locationRadio1').prop('checked')){
+            var url = ctx + '?search=Hanoi,Vietnam';
+        }else{
+            var url = ctx + '?search=Hochiminh,Vietnam';
+        }
+        var link = document.createElement('a');
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+
+    });
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 }
