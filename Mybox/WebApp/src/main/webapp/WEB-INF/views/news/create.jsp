@@ -112,6 +112,8 @@
 	</div>
 </div>
 
+<%@ include file="/WEB-INF/views/common/select_location.jsp" %>
+
 <script type="text/javascript"  src="${ctx}/resources/js/webapp/news/create.js"></script>
 
 	<script

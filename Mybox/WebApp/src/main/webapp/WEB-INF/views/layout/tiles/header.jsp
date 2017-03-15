@@ -35,6 +35,7 @@
 
 <link  href="${ctx}/resources/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link  href="${ctx}/resources/css/jquery-comments.css" rel="stylesheet" type="text/css" />
+<link  href="${ctx}/resources/css/rating.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="${ctx}/resources/js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/tether.min.js"></script>
@@ -58,10 +59,11 @@
 
 <script type="text/javascript" src="${ctx}/resources/js/dropzone.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/realestate.js"></script>
-<script type="text/javascript" src="${ctx}/resources/js/realestate-map.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js_dev/realestate-map.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/markerclusterer.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/bootstrap-dialog.min.js"></script>
 
 <script type="text/javascript" src="${ctx}/resources/js/jquery-comments.min.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/jquery.textcomplete.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/rating.js"></script>
 

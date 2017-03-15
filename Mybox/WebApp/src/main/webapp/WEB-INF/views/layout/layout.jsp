@@ -5,6 +5,9 @@
 <html lang="en">
 <head>
 <jsp:include page="tiles/header.jsp"></jsp:include>
+<style>
+
+</style>
 </head>
 <body>
 	<div class="col-md-12">
